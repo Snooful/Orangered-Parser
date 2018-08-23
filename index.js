@@ -3,19 +3,16 @@ const cmdRegistry = {};
 const path = require("path");
 const rqAll = require("require-all");
 
+const CodeError = require("codified-error");
+
 function register(cmdObj) {
 	const cmd = Object.assign({}, cmdObj);
 	
 	if (!cmd.name) {
-		const err = new TypeError("A command must have a name.");
-		err.code = "COMMAND_MISSING_NAME";
-		
-		throw err;
+		throw new CodeError("COMMAND_MISSING_NAME", "A command must have a name.");
 	} else if (!typeof cmd === "object") {
-		const err = new TypeError("A command must be specified as an object.");
-		err.code = "COMMAND_NOT_OBJECT";
 		
-		throw err;
+		throw mew CodeError("COMMAND_NOT_OBJECT", "A command must be specified as an object.");
 	} else {
 		cmdRegistry[cmd.name] = cmd;
 		cmd.aliases.forEach(alias => cmdRegistry[alias] = cmd);
