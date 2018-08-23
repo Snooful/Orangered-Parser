@@ -1,4 +1,7 @@
 {
 	"name": "orangered-parser",
-	"description": "A simple command parser made specifically for Snooful."
+	"description": "A simple command parser made specifically for Snooful.",
+	"dependencies": {
+		"codified-error": "*"
+	}
 }
