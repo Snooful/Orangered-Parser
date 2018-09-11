@@ -71,7 +71,17 @@ const argTypes = {
 				return int;
 			}
 		}
-	}
+	},
+	custom: class extends CommandArgument {
+		constructor(argument) {
+			super(argument);
+			this.custom = argument.custom;
+		}
+
+		getValue() {
+			this.custom(...arguments)
+		}
+	},
 };
 
 class Command {
