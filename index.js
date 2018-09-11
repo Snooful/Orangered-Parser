@@ -64,16 +64,16 @@ class Command {
 	});
 }
 
-function register(cmdObj) {
-	const cmd = Object.assign({}, cmdObj);
-	
+function register(cmd) {
 	if (!cmd.name) {
 		throw new CodeError("COMMAND_MISSING_NAME", "A command must have a name.");
-	} else if (!typeof cmd === "object") {
-		throw new CodeError("COMMAND_NOT_OBJECT", "A command must be specified as an object.");
+	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
+		throw new CodeError("COMMAND_NOT_OBJECT", "A command must be specified as an object or Command type.");
 	} else {
-		cmdRegistry[cmd.name] = cmd;
-		cmd.aliases.forEach(alias => cmdRegistry[alias] = cmd);
+		const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
+
+		cmdRegistry[cmd.name] = cmdFixed;
+		cmd.aliases.forEach(alias => cmdRegistry[alias] = cmdFixed);
 	}
 }
 
