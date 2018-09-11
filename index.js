@@ -7,20 +7,20 @@ class CommandArgument {
 	constructor(argument) {
 		this.key = argument.key;
 	}
-	
+
 	getValue(value) {
-			return value;
+		return value;
 	}
 }
 
 class InvalidArgumentError extends Error {
 	constructor(sourceArg, args, localizationCode, argKey) {
 		super();
-		
+
 		this.message = args.localize(localizationCode, argKey) || "An argument could not be parsed.";
 		args.send(this.message);
 		this.code = localizationCode.toUpperCase();
-		
+
 		this.sourceArg = sourceArg;
 	}
 }
@@ -53,14 +53,14 @@ const argTypes = {
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
-			
+
 			this.min = argument.min || -Infinity;
 			this.max = argument.max || Infinity;
 		}
-		
+
 		getValue(value, args) {
 			const int = parseInt(value);
-			
+
 			if (isNaN(int) || !Number.isInteger(int)) {
 				return new InvalidArgumentError(this.constructor, args, "invalid_integer_argument", this.key);
 			} else if (int > this.max) {
@@ -72,15 +72,15 @@ const argTypes = {
 			}
 		}
 	}
-}
+};
 
 class Command {
 	constructor(command) {
 		this.name = command.name;
-		
+
 		this.description = command.description || "";
 		this.longDescription = command.longDescription || this.description || "";
-		
+
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
 				if (arg instanceof CommandArgument) {
@@ -99,7 +99,7 @@ class Command {
 
 		this.handler = command.handler;
 	}
-	
+
 	run(args) {
 		if (this.handler) {
 			this.handler(args);
@@ -124,10 +124,10 @@ function register(cmd) {
 
 function registerDirectory(directory = "", recursive = true) {
 	return rqAll({
-	  dirname: path.resolve(directory),
-	  filter: /\.js$/,
-	  recursive,
-	  resolve: register,
+		dirname: path.resolve(directory),
+		filter: /\.js$/,
+		recursive,
+		resolve: register,
 	});
 }
 
@@ -156,4 +156,4 @@ module.exports = {
 	getCommandRegistry() {
 		return cmdRegistry;
 	}
-}
+};
