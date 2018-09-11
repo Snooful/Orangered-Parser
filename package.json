@@ -1,5 +1,5 @@
 {
-	"name": "orangered-parser",
+	"name": "@snooful/orangered-parser",
 	"description": "A simple command parser made specifically for Snooful.",
 	"dependencies": {
 		"require-all": "^3.0.0"
