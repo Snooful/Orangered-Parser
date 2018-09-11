@@ -58,7 +58,11 @@ class Command {
 		this.description = command.description || "";
 		this.longDescription = command.longDescription || this.description || "";
 		
-		this.arguments = command.arguments(arg => new CommandArgument(arg));
+		if (command.arguments) {
+			this.arguments = command.arguments.map(arg => new CommandArgument(arg));
+		} else {
+			this.arguments = [];
+		}
 	}
 }
 
@@ -71,16 +75,19 @@ function register(cmd) {
 		const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
 
 		cmdRegistry[cmd.name] = cmdFixed;
-		cmd.aliases.forEach(alias => cmdRegistry[alias] = cmdFixed);
+		if (cmd.aliases) {
+			cmd.aliases.forEach(alias => cmdRegistry[alias] = cmdFixed);
+		}
 	}
 }
 
 function registerDirectory(directory = "", recursive = true) {
 	return rqAll({
-	  dirname: path.normalize(directory),
+	  dirname: path.resolve(directory),
 	  filter: /\.js$/,
 	  recursive,
-	}).forEach(register);
+	  resolve: register,
+	});
 }
 
 module.exports = {
