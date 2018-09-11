@@ -41,9 +41,9 @@ const argTypes = {
 			const str = value.toString();
 			if (!this.matches.test(str)) {
 				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this.key);
-			} else if (str.length > this.max) {
+			} else if (str.length >= this.max) {
 				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this.key);
-			} else if (str.length < this.min) {
+			} else if (str.length <= this.min) {
 				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this.key);
 			} else {
 				return str;
@@ -63,9 +63,9 @@ const argTypes = {
 
 			if (isNaN(int) || !Number.isInteger(int)) {
 				return new InvalidArgumentError(this.constructor, args, "invalid_integer_argument", this.key);
-			} else if (int > this.max) {
+			} else if (int >= this.max) {
 				return new InvalidArgumentError(this.constructor, args, "integer_argument_too_high", this.key);
-			} else if (int < this.min) {
+			} else if (int <= this.min) {
 				return new InvalidArgumentError(this.constructor, args, "integer_argument_too_low", this.key);
 			} else {
 				return int;
@@ -106,7 +106,7 @@ class Command {
 		} else {
 			this.arguments = [];
 		}
-		
+
 		this.check = command.check;
 
 		this.handler = command.handler;
