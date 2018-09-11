@@ -163,18 +163,16 @@ function parse(command, pass) {
 				argsObj[argument.key] = argument.getValue(args[index], pass);
 			});
 
-			if (cmdSource.check) {
-				if (Array.isArray(cmdSource.check)) {
-					if (cmdSource.check.every(check => check(argsObj))) {
-						cmdSource.run(argsObj);
-					}
-				} else if (cmdSource.check) {
-					if (cmdSource.check(argsObj)) {
-						cmdSource.run(argsObj);
-					}
-				} else {
+			if (Array.isArray(cmdSource.check)) {
+				if (cmdSource.check.every(check => check(argsObj))) {
 					cmdSource.run(argsObj);
 				}
+			} else if (cmdSource.check) {
+				if (cmdSource.check(argsObj)) {
+					cmdSource.run(argsObj);
+				}
+			} else {
+				cmdSource.run(argsObj);
 			}
 			return argsObj;
 		}
