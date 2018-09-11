@@ -3,8 +3,6 @@ const cmdRegistry = {};
 const path = require("path");
 const rqAll = require("require-all");
 
-const CodeError = require("codified-error");
-
 class CommandArgument {
 	constructor(argument) {
 		this.key = argument.key;
@@ -61,14 +59,14 @@ class Command {
 		this.longDescription = command.longDescription || this.description || "";
 		
 		this.arguments = command.arguments(arg => new CommandArgument(arg));
-	});
+	}
 }
 
 function register(cmd) {
 	if (!cmd.name) {
-		throw new CodeError("COMMAND_MISSING_NAME", "A command must have a name.");
+		throw new Error("COMMAND_MISSING_NAME", "A command must have a name.");
 	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
-		throw new CodeError("COMMAND_NOT_OBJECT", "A command must be specified as an object or Command type.");
+		throw new Error("COMMAND_NOT_OBJECT", "A command must be specified as an object or Command type.");
 	} else {
 		const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
 
