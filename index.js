@@ -6,24 +6,10 @@ const rqAll = require("require-all");
 class CommandArgument {
 	constructor(argument) {
 		this.key = argument.key;
-		
-		this.min = argument.minLength || 0;
-		this.max = argument.maxLength || Infinity;
-
-		this.matches = new RegExp(argument.matches);
 	}
 	
 	getValue(value) {
-			const str = value.toString();
-			if (!this.matches.test(str)) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this.key);
-			} else if (str.length > this.max) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this.key);
-			} else if (str.length < this.min) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this.key);
-			} else {
-				return str;
-			}
+			return value;
 	}
 }
 
@@ -40,7 +26,30 @@ class InvalidArgumentError extends Error {
 }
 
 const argTypes = {
-	string: CommandArgument,
+	generic: CommandArgument,
+	string: class extends CommandArgument {
+		constructor(argument) {
+			this.key = argument.key;
+
+			this.min = argument.minLength || 0;
+			this.max = argument.maxLength || Infinity;
+
+			this.matches = new RegExp(argument.matches);
+		}
+
+		getValue(value) {
+			const str = value.toString();
+			if (!this.matches.test(str)) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this.key);
+			} else if (str.length > this.max) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this.key);
+			} else if (str.length < this.min) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this.key);
+			} else {
+				return str;
+			}
+		}
+	},
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
