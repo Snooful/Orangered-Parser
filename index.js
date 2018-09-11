@@ -27,6 +27,7 @@ class InvalidArgumentError extends Error {
 }
 
 const arguments = {
+const argTypes = {
 	generic: CommandArgument,
 	integer: class extends CommandArgument {
 		constructor(argument) {
@@ -60,7 +61,17 @@ class Command {
 		this.longDescription = command.longDescription || this.description || "";
 		
 		if (command.arguments) {
-			this.arguments = command.arguments.map(arg => new CommandArgument(arg));
+			this.arguments = command.arguments.map(arg => {
+				if (arg instanceof CommandArgument) {
+					return arg;
+				} else {
+					if (argTypes[arg.type]) {
+						return new argTypes[arg.type](arg);
+					} else {
+						return new argTypes.generic(arg);
+					}
+				}
+			});
 		} else {
 			this.arguments = [];
 		}
@@ -106,6 +117,7 @@ function parse(command, pass) {
 
 	const args = parts.slice(1);
 	const argsObj = Object.assign({}, pass);
+
 	cmdSource.arguments.forEach((argument, index) => {
 		argsObj[argument.key] = argument.getValue(args[index], pass);
 	});
@@ -115,7 +127,7 @@ function parse(command, pass) {
 }
 
 module.exports = {
-	arguments,
+	argTypes,
 	Command,
 	register,
 	registerDirectory,
