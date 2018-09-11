@@ -9,7 +9,8 @@ class CommandArgument {
 		
 	}
 	
-	getValue(sourceChannel) {
+	getValue(value) {
+			return value;
 	}
 }
 
@@ -25,7 +26,7 @@ class InvalidArgumentError extends Error {
 	}
 }
 
-const argumentTypes = {
+const arguments = {
 	generic: CommandArgument,
 	integer: class extends CommandArgument {
 		constructor(argument) {
@@ -63,6 +64,14 @@ class Command {
 		} else {
 			this.arguments = [];
 		}
+
+		this.handler = command.handler;
+	}
+	
+	run(args) {
+		if (this.handler) {
+			this.handler(args);
+		}
 	}
 }
 
@@ -90,8 +99,28 @@ function registerDirectory(directory = "", recursive = true) {
 	});
 }
 
+function parse(command, pass) {
+	const cmd = command.toString().trim();
+	const parts = cmd.match(/(?:[^\s"]+|"[^"]*")+/g);
+	const cmdSource = cmdRegistry[parts[0]];
+
+	const args = parts.slice(1);
+	const argsObj = Object.assign({}, pass);
+	cmdSource.arguments.forEach((argument, index) => {
+		argsObj[argument.key] = argument.getValue(args[index], pass);
+	});
+
+	cmdSource.run(argsObj);
+	return argsObj;
+}
+
 module.exports = {
+	arguments,
 	Command,
 	register,
 	registerDirectory,
+	parse,
+	getCommandRegistry() {
+		return cmdRegistry;
+	}
 }
