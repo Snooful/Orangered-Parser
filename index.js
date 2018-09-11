@@ -29,7 +29,7 @@ const argTypes = {
 	generic: CommandArgument,
 	string: class extends CommandArgument {
 		constructor(argument) {
-			this.key = argument.key;
+			super(argument);
 
 			this.min = argument.minLength || 0;
 			this.max = argument.maxLength || Infinity;
@@ -110,6 +110,11 @@ class Command {
 		this.handler = command.handler;
 	}
 
+	toString() {
+		const wrapped = this.arguments.map(arg => `<${arg.key}>`);
+		return `${this.name} ${wrapped.join(" ")}`;
+	}
+
 	run(args) {
 		if (this.handler) {
 			this.handler(args);
@@ -127,7 +132,8 @@ function register(cmd) {
 
 		cmdRegistry[cmd.name] = cmdFixed;
 		if (cmd.aliases) {
-			cmd.aliases.forEach(alias => cmdRegistry[alias] = cmdFixed);
+			const aliases = Array.isArray(cmd.aliases) ? cmd.aliases : [cmd.aliases];
+			aliases.forEach(alias => cmdRegistry[alias] = cmdFixed);
 		}
 	}
 }
@@ -144,17 +150,21 @@ function registerDirectory(directory = "", recursive = true) {
 function parse(command, pass) {
 	const cmd = command.toString().trim();
 	const parts = cmd.match(/(?:[^\s"]+|"[^"]*")+/g);
-	const cmdSource = cmdRegistry[parts[0]];
 
-	const args = parts.slice(1);
-	const argsObj = Object.assign({}, pass);
+	if (parts.length > 0) {
+		const cmdSource = cmdRegistry[parts[0]];
+		if (cmdSource) {
+			const args = parts.slice(1);
+			const argsObj = Object.assign({}, pass);
 
-	cmdSource.arguments.forEach((argument, index) => {
-		argsObj[argument.key] = argument.getValue(args[index], pass);
-	});
+			cmdSource.arguments.forEach((argument, index) => {
+				argsObj[argument.key] = argument.getValue(args[index], pass);
+			});
 
-	cmdSource.run(argsObj);
-	return argsObj;
+			cmdSource.run(argsObj);
+			return argsObj;
+		}
+	}
 }
 
 module.exports = {
