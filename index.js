@@ -26,7 +26,6 @@ class InvalidArgumentError extends Error {
 	}
 }
 
-const arguments = {
 const argTypes = {
 	generic: CommandArgument,
 	integer: class extends CommandArgument {
