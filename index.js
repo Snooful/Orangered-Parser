@@ -124,9 +124,9 @@ class Command {
 
 function register(cmd) {
 	if (!cmd.name) {
-		throw new Error("COMMAND_MISSING_NAME", "A command must have a name.");
+		throw new Error("A command must have a name.");
 	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
-		throw new Error("COMMAND_NOT_OBJECT", "A command must be specified as an object or Command type.");
+		throw new Error("A command must be specified as an object or Command type.");
 	} else {
 		const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
 
