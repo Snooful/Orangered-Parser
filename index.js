@@ -7,10 +7,19 @@ class CommandArgument {
 	constructor(argument) {
 		this.key = argument.key;
 		
+		this.min = argument.minLength || 0;
+		this.max = argument.maxLength || Infinity;
 	}
 	
 	getValue(value) {
-			return value;
+			const str = value.toString();
+			if (str.length > this.max) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this.key);
+			} else if (str.length < this.min) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this.key);
+			} else {
+				return str;
+			}
 	}
 }
 
@@ -27,7 +36,7 @@ class InvalidArgumentError extends Error {
 }
 
 const argTypes = {
-	generic: CommandArgument,
+	string: CommandArgument,
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
@@ -67,7 +76,7 @@ class Command {
 					if (argTypes[arg.type]) {
 						return new argTypes[arg.type](arg);
 					} else {
-						return new argTypes.generic(arg);
+						return new argTypes.string(arg);
 					}
 				}
 			});
