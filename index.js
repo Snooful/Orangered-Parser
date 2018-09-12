@@ -30,7 +30,7 @@ class InvalidArgumentError extends Error {
 	constructor(sourceArg, args, localizationCode, argKey) {
 		super();
 
-		this.message = args.localize(localizationCode, argKey) || "An argument could not be parsed.";
+		this.message = args.localize(localizationCode, argKey) || args.localize("argument_invalid", argKey);
 		args.send(this.message);
 		this.code = localizationCode.toUpperCase();
 
