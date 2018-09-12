@@ -79,28 +79,30 @@ const argTypes = {
 		}
 
 		getValue() {
-			this.custom(...arguments)
+			this.custom(...arguments);
 		}
 	},
 };
 
+function findName(obj) {
+	return obj.name || obj.command;
+}
+
 class Command {
 	constructor(command) {
-		this.name = command.name;
+		this.name = findName(command);
 
-		this.description = command.description || "";
+		this.description = command.description || command.describe || "";
 		this.longDescription = command.longDescription || this.description || "";
 
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
 				if (arg instanceof CommandArgument) {
 					return arg;
+				} else if (argTypes[arg.type]) {
+					return new argTypes[arg.type](arg);
 				} else {
-					if (argTypes[arg.type]) {
-						return new argTypes[arg.type](arg);
-					} else {
-						return new argTypes.string(arg);
-					}
+					return new argTypes.string(arg);
 				}
 			});
 		} else {
@@ -125,17 +127,20 @@ class Command {
 }
 
 function register(cmd) {
-	if (!cmd.name) {
+	const name = findName(cmd);
+	const alias = cmd.aliases || cmd.alias;
+
+	if (!name) {
 		throw new Error("A command must have a name.");
 	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
-		throw new Error("A command must be specified as an object or Command type.");
+		throw new TypeError("A command must be specified as an object or Command type.");
 	} else {
 		const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
 
-		cmdRegistry[cmd.name] = cmdFixed;
-		if (cmd.aliases) {
-			const aliases = Array.isArray(cmd.aliases) ? cmd.aliases : [cmd.aliases];
-			aliases.forEach(alias => cmdRegistry[alias] = cmdFixed);
+		cmdRegistry[name] = cmdFixed;
+		if (alias) {
+			const aliases = Array.isArray(alias) ? alias : [alias];
+			aliases.forEach(alias2 => cmdRegistry[alias2] = cmdFixed);
 		}
 	}
 }
@@ -187,5 +192,5 @@ module.exports = {
 	parse,
 	getCommandRegistry() {
 		return cmdRegistry;
-	}
+	},
 };
