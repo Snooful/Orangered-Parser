@@ -6,10 +6,16 @@ const rqAll = require("require-all");
 class CommandArgument {
 	constructor(argument) {
 		this.key = argument.key;
+		this.default = argument.default;
 	}
 
 	getValue(value) {
 		return value;
+	}
+
+	get(value) {
+		const val = this.getValue(value);
+		return val === undefined ? this.default : val;
 	}
 }
 
@@ -165,7 +171,7 @@ function parse(command, pass) {
 			const argsObj = Object.assign({}, pass);
 
 			cmdSource.arguments.forEach((argument, index) => {
-				argsObj[argument.key] = argument.getValue(args[index], pass);
+				argsObj[argument.key] = argument.get(args[index], pass);
 			});
 
 			if (Array.isArray(cmdSource.check)) {
@@ -191,6 +197,6 @@ module.exports = {
 	registerDirectory,
 	parse,
 	getCommandRegistry() {
-		return cmdRegistry;
+		return Object.values(cmdRegistry);
 	},
 };
