@@ -13,8 +13,8 @@ class CommandArgument {
 		return value;
 	}
 
-	get(value) {
-		const val = this.getValue(value);
+	get(value, args) {
+		const val = this.getValue(value, args);
 		return val === undefined ? this.default : val;
 	}
 }
@@ -43,7 +43,7 @@ const argTypes = {
 			this.matches = new RegExp(argument.matches);
 		}
 
-		getValue(value) {
+		getValue(value, args) {
 			const str = value.toString();
 			if (!this.matches.test(str)) {
 				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this.key);
