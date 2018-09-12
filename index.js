@@ -6,7 +6,9 @@ const rqAll = require("require-all");
 class CommandArgument {
 	constructor(argument) {
 		this.key = argument.key;
+
 		this.default = argument.default;
+		this.choices = argument.choices;
 	}
 
 	getValue(value) {
@@ -15,7 +17,12 @@ class CommandArgument {
 
 	get(value, args) {
 		const val = this.getValue(value, args);
-		return val === undefined ? this.default : val;
+		const defaulted = val === undefined ? this.default : val;
+		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
+			return defaulted;
+		} else {
+			return new InvalidArgumentError(this.constructor, args, "argument_unavailable_choice", this.key);
+		}
 	}
 }
 
