@@ -15,13 +15,28 @@ class CommandArgument {
 		return value;
 	}
 
-	get(value, args) {
+	getAlmost(value, args) {
 		const val = this.getValue(value, args);
 		const defaulted = val === undefined ? this.default : val;
 		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
 			return defaulted;
 		} else {
 			return new InvalidArgumentError(this.constructor, args, "argument_unavailable_choice", this, value);
+		}
+	}
+
+	get(value, args) {
+		const val = this.getAlmost(value, args);
+		if (val instanceof InvalidArgumentError) {
+			args.send(val.message);
+			return {
+				success: false,
+			};
+		} else {
+			return {
+				success: true,
+				value: val,
+			};
 		}
 	}
 }
@@ -31,7 +46,6 @@ class InvalidArgumentError extends Error {
 		super();
 
 		this.message = args.localize(localizationCode, argument, value) || args.localize("argument_invalid", argument, value);
-		args.send(this.message);
 		this.code = localizationCode.toUpperCase();
 
 		this.sourceArg = sourceArg;
@@ -176,23 +190,28 @@ function parse(command, pass) {
 		if (cmdSource) {
 			const args = parts.slice(1);
 			const argsObj = Object.assign({}, pass);
+			let success = true;
 
 			cmdSource.arguments.forEach((argument, index) => {
-				argsObj[argument.key] = argument.get(args[index], pass);
+				const get = argument.get(args[index], pass);
+				argsObj[argument.key] = get.value;
+				success = success === false ? false : get.success;
 			});
 
-			if (Array.isArray(cmdSource.check)) {
-				if (cmdSource.check.every(check => check(argsObj))) {
+			if (success) {
+				if (Array.isArray(cmdSource.check)) {
+					if (cmdSource.check.every(check => check(argsObj))) {
+						cmdSource.run(argsObj);
+					}
+				} else if (cmdSource.check) {
+					if (cmdSource.check(argsObj)) {
+						cmdSource.run(argsObj);
+					}
+				} else {
 					cmdSource.run(argsObj);
 				}
-			} else if (cmdSource.check) {
-				if (cmdSource.check(argsObj)) {
-					cmdSource.run(argsObj);
-				}
-			} else {
-				cmdSource.run(argsObj);
+				return argsObj;
 			}
-			return argsObj;
 		}
 	}
 }
