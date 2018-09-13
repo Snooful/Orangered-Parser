@@ -21,16 +21,16 @@ class CommandArgument {
 		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
 			return defaulted;
 		} else {
-			return new InvalidArgumentError(this.constructor, args, "argument_unavailable_choice", this.key);
+			return new InvalidArgumentError(this.constructor, args, "argument_unavailable_choice", this, value);
 		}
 	}
 }
 
 class InvalidArgumentError extends Error {
-	constructor(sourceArg, args, localizationCode, argKey) {
+	constructor(sourceArg, args, localizationCode, argument, value) {
 		super();
 
-		this.message = args.localize(localizationCode, argKey) || args.localize("argument_invalid", argKey);
+		this.message = args.localize(localizationCode, argument, value) || args.localize("argument_invalid", argument, value);
 		args.send(this.message);
 		this.code = localizationCode.toUpperCase();
 
@@ -53,11 +53,11 @@ const argTypes = {
 		getValue(value, args) {
 			const str = value.toString();
 			if (!this.matches.test(str)) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this.key);
+				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
 			} else if (str.length >= this.max) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this.key);
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this, value);
 			} else if (str.length <= this.min) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this.key);
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this, value);
 			} else {
 				return str;
 			}
@@ -75,11 +75,11 @@ const argTypes = {
 			const int = parseInt(value);
 
 			if (isNaN(int) || !Number.isInteger(int)) {
-				return new InvalidArgumentError(this.constructor, args, "invalid_integer_argument", this.key);
+				return new InvalidArgumentError(this.constructor, args, "integer_argument_invalid", this, value);
 			} else if (int >= this.max) {
-				return new InvalidArgumentError(this.constructor, args, "integer_argument_too_high", this.key);
+				return new InvalidArgumentError(this.constructor, args, "integer_argument_too_high", this, value);
 			} else if (int <= this.min) {
-				return new InvalidArgumentError(this.constructor, args, "integer_argument_too_low", this.key);
+				return new InvalidArgumentError(this.constructor, args, "integer_argument_too_low", this, value);
 			} else {
 				return int;
 			}
