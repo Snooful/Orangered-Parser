@@ -5,9 +5,22 @@ const rqAll = require("require-all");
 
 class CommandArgument {
 	constructor(argument) {
+		/**
+			* The key to represent this argument.
+			* @type {string}
+		*/
 		this.key = argument.key;
 
+		/**
+			* The value for this argument if one is not specified.
+			* @type {*}
+		*/
 		this.default = argument.default;
+		
+		/**
+			* The values allowed to be selected.
+			* @type {*[]}
+		*/
 		this.choices = argument.choices;
 	}
 
@@ -41,6 +54,9 @@ class CommandArgument {
 	}
 }
 
+/**
+	* An error when a value for an argument is not allowed or cannot be parsed.
+*/
 class InvalidArgumentError extends Error {
 	constructor(sourceArg, args, localizationCode, argument, value) {
 		super();
@@ -172,6 +188,11 @@ function register(cmd) {
 	}
 }
 
+/**
+	* Registers every JavaScript file in a directory as a command.
+	* @param {string} directory The path to the directory to register.
+	* @param {boolean} recursive If true, registers commands in subdirectories.
+*/
 function registerDirectory(directory = "", recursive = true) {
 	return rqAll({
 		dirname: path.resolve(directory),
@@ -181,6 +202,10 @@ function registerDirectory(directory = "", recursive = true) {
 	});
 }
 
+/**
+	* Runs a command by parsing it and its arguments.
+	* @param {string} command The command to parse.
+*/
 function parse(command, pass) {
 	const cmd = command.toString().trim();
 	const parts = cmd.match(/(?:[^\s"]+|"[^"]*")+/g);
