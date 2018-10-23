@@ -95,6 +95,10 @@ const argTypes = {
 		}
 
 		getValue(value, args) {
+			if (value === undefined) {
+				return undefined;
+			}
+
 			const str = value.toString();
 			if (!this.matches.test(str)) {
 				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
@@ -118,6 +122,10 @@ const argTypes = {
 		}
 
 		getValue(value, args) {
+			if (value === undefined) {
+				return undefined;
+			}
+
 			const int = parseInt(value);
 
 			if (isNaN(int) || !Number.isInteger(int)) {
