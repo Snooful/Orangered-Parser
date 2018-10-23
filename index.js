@@ -28,6 +28,12 @@ class CommandArgument {
 			* @type {*[]}
 		*/
 		this.choices = argument.choices;
+
+		/**
+			* A description of the argument.
+			* @type {string}
+		*/
+		this.description = argument.description;
 	}
 
 	getValue(value) {
@@ -165,7 +171,7 @@ class Command {
 			this.arguments = [];
 		}
 
-		this.aliases = [];
+		this.aliases = command.aliases || [];
 
 		this.check = command.check;
 
