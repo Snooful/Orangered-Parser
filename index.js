@@ -10,7 +10,7 @@ class CommandArgument {
 			* @type {string}
 		*/
 		this.type = "generic";
-		
+
 		/**
 			* The key to represent this argument.
 			* @type {string}
@@ -22,7 +22,7 @@ class CommandArgument {
 			* @type {*}
 		*/
 		this.default = argument.default;
-		
+
 		/**
 			* The values allowed to be selected.
 			* @type {*[]}
@@ -34,9 +34,9 @@ class CommandArgument {
 		return value;
 	}
 
-	getAlmost(value, args) {
+	getWithDefault(value, args) {
 		const val = this.getValue(value, args);
-		const defaulted = val === undefined ? this.default : val;
+		const defaulted = val === undefined || val instanceof Error ? this.default : val;
 		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
 			return defaulted;
 		} else {
@@ -45,7 +45,7 @@ class CommandArgument {
 	}
 
 	get(value, args) {
-		const val = this.getAlmost(value, args);
+		const val = this.getWithDefault(value, args);
 		if (val instanceof InvalidArgumentError) {
 			args.send(val.message);
 			return {
@@ -79,7 +79,7 @@ const argTypes = {
 	string: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
-			
+
 			this.type = "string";
 
 			this.min = argument.minLength || 0;
@@ -104,7 +104,7 @@ const argTypes = {
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
-			
+
 			this.type = "integer";
 
 			this.min = argument.min || -Infinity;
@@ -128,7 +128,7 @@ const argTypes = {
 	custom: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
-			
+
 			this.type = "custom";
 			this.custom = argument.custom;
 		}
@@ -146,6 +146,7 @@ function findName(obj) {
 class Command {
 	constructor(command) {
 		this.name = findName(command);
+		this.originalName = command.originalName || this.name;
 
 		this.description = command.description || command.describe || "";
 		this.longDescription = command.longDescription || this.description || "";
@@ -164,12 +165,18 @@ class Command {
 			this.arguments = [];
 		}
 
+		this.aliases = [];
+
 		this.check = command.check;
 
 		this.handler = command.handler;
 	}
 
-	toString() {
+	/**
+		* Generates a string based off of the command and its arguments.
+		* @returns {string} The command with arguments.
+	*/
+	usage() {
 		const wrapped = this.arguments.map(arg => `<${arg.key}>`);
 		return `${this.name} ${wrapped.join(" ")}`;
 	}
@@ -183,20 +190,24 @@ class Command {
 
 function register(cmd) {
 	const name = findName(cmd);
-	const alias = cmd.aliases || cmd.alias;
-
 	if (!name) {
 		throw new Error("A command must have a name.");
 	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
 		throw new TypeError("A command must be specified as an object or Command type.");
 	} else {
-		const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
+		const alias = cmd.aliases || [];
+		alias.push(name);
 
-		cmdRegistry[name] = cmdFixed;
-		if (alias) {
-			const aliases = Array.isArray(alias) ? alias : [alias];
-			aliases.forEach(alias2 => cmdRegistry[alias2] = cmdFixed);
-		}
+		alias.forEach(aname => {
+			cmd.name = aname;
+			cmd.originalName = name;
+
+			cmd.aliases = alias.filter(name2 => name2 !== aname);
+
+			// Make it into a Command and actually add it to the registry
+			const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
+			cmdRegistry[aname] = cmdFixed;
+		});
 	}
 }
 
