@@ -6,6 +6,12 @@ const rqAll = require("require-all");
 class CommandArgument {
 	constructor(argument) {
 		/**
+			* A string to represent the argument type to the user.
+			* @type {string}
+		*/
+		this.type = "generic";
+		
+		/**
 			* The key to represent this argument.
 			* @type {string}
 		*/
@@ -73,6 +79,8 @@ const argTypes = {
 	string: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
+			
+			this.type = "string";
 
 			this.min = argument.minLength || 0;
 			this.max = argument.maxLength || Infinity;
@@ -96,6 +104,8 @@ const argTypes = {
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
+			
+			this.type = "integer";
 
 			this.min = argument.min || -Infinity;
 			this.max = argument.max || Infinity;
@@ -118,6 +128,8 @@ const argTypes = {
 	custom: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
+			
+			this.type = "custom";
 			this.custom = argument.custom;
 		}
 
