@@ -3,6 +3,13 @@ const cmdRegistry = {};
 const path = require("path");
 const rqAll = require("require-all");
 
+function defaulter(val, defaultTo) {
+	if (!defaultTo) {
+		return val;
+	}
+	return val === undefined || val instanceof Error ? defaultTo : val;
+}
+
 class CommandArgument {
 	constructor(argument) {
 		/**
@@ -24,6 +31,13 @@ class CommandArgument {
 		this.default = argument.default;
 
 		/**
+		 	* Whether to allow no input for this argument.
+			* You may not set a default if this is enabled.
+			* @type {boolean}
+		*/
+		this.required = argument.required || false;
+
+		/**
 			* The values allowed to be selected.
 			* @type {*[]}
 		*/
@@ -42,7 +56,13 @@ class CommandArgument {
 
 	getWithDefault(value, args) {
 		const val = this.getValue(value, args);
-		const defaulted = val === undefined || val instanceof Error ? this.default : val;
+
+		if (this.required && val === undefined) {
+			return new InvalidArgumentError(this.constructor, args, "argument_required", this, value);
+		}
+
+		const defaulted = defaulter(val, this.default);
+
 		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
 			return defaulted;
 		} else {
@@ -73,7 +93,14 @@ class InvalidArgumentError extends Error {
 	constructor(sourceArg, args, localizationCode, argument, value) {
 		super();
 
-		this.message = args.localize(localizationCode, argument, value) || args.localize("argument_invalid", argument, value);
+		// Set the message
+		const localized = args.localize(localizationCode, argument, value, args.localize("argument_type_" + argument.type));
+		if (localized) {
+			this.message = localized;
+		} else {
+			this.message = args.localize("argument_invalid", argument, value, args.localize("argument_type_" + argument.type));
+		}
+
 		this.code = localizationCode.toUpperCase();
 
 		this.sourceArg = sourceArg;
@@ -277,12 +304,15 @@ function parse(command, pass) {
 		if (cmdSource) {
 			const args = parts.slice(1);
 			const argsObj = Object.assign({}, pass);
+
 			let success = true;
 
 			cmdSource.arguments.forEach((argument, index) => {
 				const get = argument.get(args[index], pass);
 				argsObj[argument.key] = get.value;
-				success = success === false ? false : get.success;
+				if (!get.success) {
+					success = false;
+				}
 			});
 
 			if (success) {
