@@ -111,6 +111,31 @@ const argTypes = {
 			}
 		}
 	},
+	command: class extends CommandArgument {
+		constructor(argument) {
+			super(argument);
+
+			this.type = "command";
+			this.allowAlias = argument.allowAlias || true;
+		}
+
+		getValue(value, args) {
+			if (value === undefined) {
+				return undefined;
+			}
+
+			const cmd = cmdRegistry[value];
+			if (cmd) {
+				if (!this.allowAlias && cmd.name !== cmd.originalName) {
+					return new InvalidArgumentError(this.constructor, args, "command_argument_not_original", this, value);
+				} else {
+					return cmd;
+				}
+			} else {
+				return new InvalidArgumentError(this.constructor, args, "command_argument_nonexistent", this, value);
+			}
+		}
+	},
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
