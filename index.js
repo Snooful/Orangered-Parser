@@ -107,6 +107,83 @@ class InvalidArgumentError extends Error {
 	}
 }
 
+class StringArgument extends CommandArgument {
+	constructor(argument) {
+		super(argument);
+
+		this.type = "string";
+
+		this.min = argument.minLength || 0;
+		this.max = argument.maxLength || Infinity;
+
+		this.matches = new RegExp(argument.matches);
+	}
+
+	getValue(value, args) {
+		if (value === undefined) {
+			return undefined;
+		}
+
+		const str = value.toString();
+		if (!this.matches.test(str)) {
+			return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
+		} else if (str.length >= this.max) {
+			return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this, value);
+		} else if (str.length <= this.min) {
+			return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this, value);
+		} else {
+			return str;
+		}
+	}
+}
+
+class UserArgument extends StringArgument {
+	constructor(argument) {
+		super(argument);
+	}
+
+	getValue(value, args) {
+		const string = super.getValue(value, args);
+
+		// :thinking:
+		const noU = /(u\/)?(.*)/i.exec(string)[2];
+
+		if (/^[\w-]+$/.test(noU)) {
+			if (noU.length < 3) {
+				return new InvalidArgumentError(this.constructor, args, "user_argument_too_short", this, value);
+			} else if (noU.length > 20) {
+				return new InvalidArgumentError(this.constructor, args, "user_argument_too_long", this, value);
+			} else {
+				return noU;
+			}
+		} else {
+			return new InvalidArgumentError(this.constructor, args, "user_argument_invalid", this, value);
+		}
+	}
+}
+class SubredditArgument extends StringArgument {
+	constructor(argument) {
+		super(argument);
+	}
+
+	getValue(value, args) {
+		const string = super.getValue(value, args);
+		const noR = /(r\/)?(.*)/i.exec(string)[2];
+
+		if (/^[A-Za-z0-9]\w+$/.test(noR)) {
+			if (noR.length < 3) {
+				return new InvalidArgumentError(this.constructor, args, "subreddit_argument_too_short", this, value);
+			} else if (noR.length > 20) {
+				return new InvalidArgumentError(this.constructor, args, "subreddit_argument_too_long", this, value);
+			} else {
+				return noR;
+			}
+		} else {
+			return new InvalidArgumentError(this.constructor, args, "subreddit_argument_invalid", this, value);
+		}
+	}
+}
+
 const argTypes = {
 	command: class extends CommandArgument {
 		constructor(argument) {
@@ -174,35 +251,9 @@ const argTypes = {
 			}
 		}
 	},
-	string: class extends CommandArgument {
-		constructor(argument) {
-			super(argument);
-
-			this.type = "string";
-
-			this.min = argument.minLength || 0;
-			this.max = argument.maxLength || Infinity;
-
-			this.matches = new RegExp(argument.matches);
-		}
-
-		getValue(value, args) {
-			if (value === undefined) {
-				return undefined;
-			}
-
-			const str = value.toString();
-			if (!this.matches.test(str)) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
-			} else if (str.length >= this.max) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this, value);
-			} else if (str.length <= this.min) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this, value);
-			} else {
-				return str;
-			}
-		}
-	},
+	string: StringArgument,
+	subreddit: SubredditArgument,
+	user: UserArgument,
 };
 
 function findName(obj) {
