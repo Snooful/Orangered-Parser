@@ -10,7 +10,7 @@ function defaulter(val, defaultTo) {
 	return val === undefined || val instanceof Error ? defaultTo : val;
 }
 
-class CommandArgument {
+class Argument {
 	constructor(argument) {
 		/**
 			* A string to represent the argument type to the user.
@@ -107,7 +107,7 @@ class InvalidArgumentError extends Error {
 	}
 }
 
-class StringArgument extends CommandArgument {
+class StringArgument extends Argument {
 	constructor(argument) {
 		super(argument);
 
@@ -185,7 +185,7 @@ class SubredditArgument extends StringArgument {
 }
 
 const argTypes = {
-	command: class extends CommandArgument {
+	command: class extends Argument {
 		constructor(argument) {
 			super(argument);
 
@@ -210,7 +210,7 @@ const argTypes = {
 			}
 		}
 	},
-	custom: class extends CommandArgument {
+	custom: class extends Argument {
 		constructor(argument) {
 			super(argument);
 
@@ -222,8 +222,8 @@ const argTypes = {
 			this.custom(...arguments);
 		}
 	},
-	generic: CommandArgument,
-	integer: class extends CommandArgument {
+	generic: Argument,
+	integer: class extends Argument {
 		constructor(argument) {
 			super(argument);
 
@@ -270,7 +270,7 @@ class Command {
 
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
-				if (arg instanceof CommandArgument) {
+				if (arg instanceof Argument) {
 					return arg;
 				} else if (argTypes[arg.type]) {
 					return new argTypes[arg.type](arg);
@@ -397,6 +397,7 @@ function parse(command, pass) {
 }
 
 module.exports = {
+	Argument,
 	Command,
 	argTypes,
 	getCommandRegistry() {
