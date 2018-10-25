@@ -108,36 +108,6 @@ class InvalidArgumentError extends Error {
 }
 
 const argTypes = {
-	generic: CommandArgument,
-	string: class extends CommandArgument {
-		constructor(argument) {
-			super(argument);
-
-			this.type = "string";
-
-			this.min = argument.minLength || 0;
-			this.max = argument.maxLength || Infinity;
-
-			this.matches = new RegExp(argument.matches);
-		}
-
-		getValue(value, args) {
-			if (value === undefined) {
-				return undefined;
-			}
-
-			const str = value.toString();
-			if (!this.matches.test(str)) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
-			} else if (str.length >= this.max) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this, value);
-			} else if (str.length <= this.min) {
-				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this, value);
-			} else {
-				return str;
-			}
-		}
-	},
 	command: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
@@ -163,6 +133,19 @@ const argTypes = {
 			}
 		}
 	},
+	custom: class extends CommandArgument {
+		constructor(argument) {
+			super(argument);
+
+			this.type = "custom";
+			this.custom = argument.custom;
+		}
+
+		getValue() {
+			this.custom(...arguments);
+		}
+	},
+	generic: CommandArgument,
 	integer: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
@@ -191,16 +174,33 @@ const argTypes = {
 			}
 		}
 	},
-	custom: class extends CommandArgument {
+	string: class extends CommandArgument {
 		constructor(argument) {
 			super(argument);
 
-			this.type = "custom";
-			this.custom = argument.custom;
+			this.type = "string";
+
+			this.min = argument.minLength || 0;
+			this.max = argument.maxLength || Infinity;
+
+			this.matches = new RegExp(argument.matches);
 		}
 
-		getValue() {
-			this.custom(...arguments);
+		getValue(value, args) {
+			if (value === undefined) {
+				return undefined;
+			}
+
+			const str = value.toString();
+			if (!this.matches.test(str)) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
+			} else if (str.length >= this.max) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this, value);
+			} else if (str.length <= this.min) {
+				return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this, value);
+			} else {
+				return str;
+			}
 		}
 	},
 };
@@ -254,6 +254,11 @@ class Command {
 	}
 }
 
+/**
+ * Registers a single command.
+ * @param {(object|Command)} cmd The command to register.
+ * @returns {object} The registry including the new command.
+ */
 function register(cmd) {
 	const name = findName(cmd);
 	if (!name) {
@@ -274,6 +279,8 @@ function register(cmd) {
 			const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
 			cmdRegistry[aname] = cmdFixed;
 		});
+
+		return cmdRegistry;
 	}
 }
 
@@ -281,19 +288,24 @@ function register(cmd) {
 	* Registers every JavaScript file in a directory as a command.
 	* @param {string} directory The path to the directory to register.
 	* @param {boolean} recursive If true, registers commands in subdirectories.
+ 	* @returns {object} The registry including the new commands.
+
 */
 function registerDirectory(directory = "", recursive = true) {
-	return rqAll({
+	rqAll({
 		dirname: path.resolve(directory),
 		filter: /\.js$/,
 		recursive,
 		resolve: register,
 	});
+	return cmdRegistry;
 }
 
 /**
 	* Runs a command by parsing it and its arguments.
 	* @param {string} command The command to parse.
+	* @param {object} pass Extra values to pass to the command when ran.
+	* @returns {object} The arguments parsed.
 */
 function parse(command, pass) {
 	const cmd = command.toString().trim();
@@ -334,12 +346,12 @@ function parse(command, pass) {
 }
 
 module.exports = {
-	argTypes,
 	Command,
-	register,
-	registerDirectory,
-	parse,
+	argTypes,
 	getCommandRegistry() {
 		return Object.values(cmdRegistry);
 	},
+	parse,
+	register,
+	registerDirectory,
 };
