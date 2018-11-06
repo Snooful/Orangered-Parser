@@ -3,6 +3,7 @@
 	"description": "A simple command parser made specifically for Snooful.",
 	"dependencies": {
 		"collections": "^5.1.5",
+		"parse-duration": "^0.1.1",
 		"require-all": "^3.0.0"
 	},
 	"version": "2.0.0",
