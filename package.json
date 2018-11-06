@@ -2,6 +2,7 @@
 	"name": "@snooful/orangered-parser",
 	"description": "A simple command parser made specifically for Snooful.",
 	"dependencies": {
+		"parse-duration": "^0.1.1",
 		"require-all": "^3.0.0"
 	},
 	"version": "2.0.0",

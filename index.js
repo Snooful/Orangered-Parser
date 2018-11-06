@@ -2,6 +2,7 @@ const cmdRegistry = {};
 
 const path = require("path");
 const rqAll = require("require-all");
+const dur = require("parse-duration");
 
 function defaulter(val, defaultTo) {
 	if (!defaultTo) {
