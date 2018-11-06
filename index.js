@@ -1,5 +1,5 @@
 const Map = require("collections/map");
-const cmdRegistry = new Map();
+let cmdRegistry = new Map();
 
 const path = require("path");
 const rqAll = require("require-all");
@@ -431,11 +431,27 @@ function clear() {
 	return cmdRegistry.clear();
 }
 
+/**
+ * Deregisters a command.
+ * @param {string} name The name of the command to deregister.
+ * @param {boolean} includeAlternatives If true, also deregisters aliases of the same command (even if the target is an alias).
+ * @return {Map} The command registry excluding the deregistered commands.
+ */
+function deregister(name, includeAlternatives = true) {
+	if (includeAlternatives) {
+		cmdRegistry = cmdRegistry.filter(command => command.originalName !== name);
+	} else {
+		cmdRegistry = cmdRegistry.filter(command => command.name !== name);
+	}
+	return cmdRegistry;
+}
+
 module.exports = {
 	Argument,
 	Command,
 	argTypes,
 	clear,
+	deregister,
 	getCommandRegistry() {
 		return cmdRegistry;
 	},
