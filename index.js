@@ -237,6 +237,10 @@ const argTypes = {
 		}
 
 		getValue(value, args) {
+			if (value === undefined) {
+				return undefined;
+			}
+
 			try {
 				return dur(value);
 			} catch (error) {
