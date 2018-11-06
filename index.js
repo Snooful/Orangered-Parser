@@ -223,6 +223,21 @@ const argTypes = {
 			this.custom(...arguments);
 		}
 	},
+	duration: class extends Argument {
+		constructor(argument) {
+			super(argument);
+
+			this.type = "duration";
+		}
+
+		getValue(value, args) {
+			try {
+				return dur(value);
+			} catch (error) {
+				return new InvalidArgumentError(this.constructor, args, "duration_argument_invalid", this, value);
+			}
+		}
+	},
 	generic: Argument,
 	integer: class extends Argument {
 		constructor(argument) {
