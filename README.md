@@ -57,7 +57,22 @@ parse.parse("nodejs 11", {
 
 ### Accessing the Registry
 
+You can access the command registry by calling `parser.getCommandRegistry()`. This provides you with a [`Map`](http://www.collectionsjs.com/map).
+
 ```js
-// Get a registered command
-parser.getCommandRegistry().get("code");
+const registry = parser.getCommandRegistry();
+```
+
+To get a command from the registry, simply call `registry.get(command)`.
+
+```js
+const cmd = registry.get("code");
+```
+
+You can filter out aliases by checking if the command's original name is the same as its name:
+
+```js
+registry.filter(command => {
+	return command.originalName !== command.name;
+});
 ```
