@@ -423,10 +423,19 @@ function parse(command, pass) {
 	}
 }
 
+/**
+ * Deregisters every command.
+ * @returns {undefined}
+ */
+function clear() {
+	return cmdRegistry.clear();
+}
+
 module.exports = {
 	Argument,
 	Command,
 	argTypes,
+	clear,
 	getCommandRegistry() {
 		return cmdRegistry;
 	},
