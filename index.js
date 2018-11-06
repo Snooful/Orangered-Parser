@@ -1,4 +1,5 @@
-const cmdRegistry = {};
+const Map = require("collections/map");
+const cmdRegistry = new Map();
 
 const path = require("path");
 const rqAll = require("require-all");
@@ -205,7 +206,7 @@ const argTypes = {
 				return undefined;
 			}
 
-			const cmd = cmdRegistry[value];
+			const cmd = cmdRegistry.get(value);
 			if (cmd) {
 				if (!this.allowAlias && cmd.name !== cmd.originalName) {
 					return new InvalidArgumentError(this.constructor, args, "command_argument_not_original", this, value);
@@ -334,7 +335,7 @@ class Command {
 /**
  * Registers a single command.
  * @param {(object|Command)} cmd The command to register.
- * @returns {object} The registry including the new command.
+ * @returns {Map} The registry including the new command.
  */
 function register(cmd) {
 	const name = findName(cmd);
@@ -354,7 +355,7 @@ function register(cmd) {
 
 			// Make it into a Command and actually add it to the registry
 			const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
-			cmdRegistry[aname] = cmdFixed;
+			cmdRegistry.set(aname, cmdFixed);
 		});
 
 		return cmdRegistry;
@@ -365,7 +366,7 @@ function register(cmd) {
 	* Registers every JavaScript file in a directory as a command.
 	* @param {string} directory The path to the directory to register.
 	* @param {boolean} recursive If true, registers commands in subdirectories.
- 	* @returns {object} The registry including the new commands.
+ 	* @returns {Map} The registry including the new commands.
 
 */
 function registerDirectory(directory = "", recursive = true) {
@@ -389,7 +390,7 @@ function parse(command, pass) {
 	const parts = cmd.match(/(?:[^\s"]+|"[^"]*")+/g);
 
 	if (parts.length > 0) {
-		const cmdSource = cmdRegistry[parts[0]];
+		const cmdSource = cmdRegistry.get(parts[0]);
 		if (cmdSource) {
 			const args = parts.slice(1);
 			const argsObj = Object.assign({}, pass);
@@ -427,7 +428,7 @@ module.exports = {
 	Command,
 	argTypes,
 	getCommandRegistry() {
-		return Object.values(cmdRegistry);
+		return cmdRegistry;
 	},
 	parse,
 	register,
