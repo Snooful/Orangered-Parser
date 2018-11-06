@@ -53,6 +53,7 @@ If you would like to pass extra data to a command, use the `pass` argument. Argu
 parse.parse("nodejs 11", {
     version: "11",
 });
+```
 
 ### Accessing the Registry
 
