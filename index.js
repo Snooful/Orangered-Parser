@@ -321,7 +321,13 @@ class Command {
 		* @returns {string} The command with arguments.
 	*/
 	usage() {
-		const wrapped = this.arguments.map(arg => `<${arg.key}>`);
+		const wrapped = this.arguments.map(arg => {
+			if (arg.required) {
+				return `<${arg.key}>`;
+			} else {
+				return `[${arg.key}]`;
+			}
+		});
 		return `${this.name} ${wrapped.join(" ")}`;
 	}
 
