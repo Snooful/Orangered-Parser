@@ -1,6 +1,6 @@
 # Orangered Parser
 
-A lightweight command parser for Snooful.
+A lightweight command parser for [Snooful](https://github.com/Snooful/Snooful).
 
 ## Installation
 
