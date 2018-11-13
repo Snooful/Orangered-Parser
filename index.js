@@ -11,6 +11,8 @@ dur.decade = dur.dec = (dur.year * 10);
 dur.century = dur.cen = (dur.decade * 10);
 dur.millennium = dur.mil = (dur.century * 10);
 
+const { split } = require("smart-splitter");
+
 function defaulter(val, defaultTo) {
 	if (!defaultTo) {
 		return val;
