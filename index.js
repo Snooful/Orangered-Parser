@@ -354,11 +354,15 @@ module.exports.Command = Command;
  * @returns {Map} The registry including the new command.
  */
 function register(cmd) {
-	const name = findName(cmd);
+	const name = cmd.name;
 	if (!name) {
-		throw new Error("A command must have a name.");
+		const error = new Error("Commands must have names.");
+		error.code = "MISSING_COMMAND_NAME";
+		throw error;
 	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
-		throw new TypeError("A command must be specified as an object or Command type.");
+		const error = new TypeError("Commands must be specified as an object or Command type.");
+		error.code = "INVALID_COMMAND_TYPE";
+		throw error;
 	} else {
 		const alias = cmd.aliases || [];
 		alias.push(name);
