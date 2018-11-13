@@ -13,11 +13,14 @@ dur.millennium = dur.mil = (dur.century * 10);
 
 const { split } = require("smart-splitter");
 
+// This is used to camelcase argument keys in the args object
+const camelCase = require("camelcase");
+
 function defaulter(val, defaultTo) {
 	if (!defaultTo) {
 		return val;
 	}
-	return val === undefined || val instanceof Error ? defaultTo : val;
+	return (val === undefined || val instanceof Error) ? defaultTo : val;
 }
 
 class Argument {
@@ -411,7 +414,11 @@ function parse(command, pass) {
 
 			cmdSource.arguments.forEach((argument, index) => {
 				const get = argument.get(args[index], pass);
-				argsObj[argument.key] = get.value;
+				
+				// We camelCase this so it's easier to access
+				// args["casing-example"] vs. args.casingExample
+				argsObj[camelCase(argument.key)] = get.value;
+				
 				if (!get.success) {
 					success = false;
 				}
