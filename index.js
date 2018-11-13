@@ -395,12 +395,11 @@ function registerDirectory(directory = "", recursive = true) {
 */
 function parse(command, pass) {
 	const cmd = command.toString().trim();
-	const parts = cmd.match(/(?:[^\s"]+|"[^"]*")+/g);
-
-	if (parts.length > 0) {
-		const cmdSource = cmdRegistry.get(parts[0]);
+	const cmdStr = cmd.substr(0, cmd.indexOf(" "));
+	if (cmdStr) {
+		const cmdSource = cmdRegistry.get(cmdStr);
 		if (cmdSource) {
-			const args = parts.slice(1);
+			const args = split(cmd.substr(cmd.indexOf(" ") + 1), cmdSource.arguments.length);
 			const argsObj = Object.assign({}, pass);
 
 			let success = true;
