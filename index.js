@@ -95,6 +95,7 @@ class Argument {
 		}
 	}
 }
+module.exports.Argument = Argument;
 
 /**
 	* An error when a value for an argument is not allowed or cannot be parsed.
@@ -284,6 +285,7 @@ const argTypes = {
 	subreddit: SubredditArgument,
 	user: UserArgument,
 };
+module.exports.argTypes = argTypes;
 
 function findName(obj) {
 	return obj.name || obj.command;
@@ -339,6 +341,7 @@ class Command {
 		}
 	}
 }
+module.exports.Command = Command;
 
 /**
  * Registers a single command.
@@ -369,6 +372,7 @@ function register(cmd) {
 		return cmdRegistry;
 	}
 }
+module.exports.register = register;
 
 /**
 	* Registers every JavaScript file in a directory as a command.
@@ -386,6 +390,7 @@ function registerDirectory(directory = "", recursive = true) {
 	});
 	return cmdRegistry;
 }
+module.exports.registerDirectory = registerDirectory;
 
 /**
 	* Runs a command by parsing it and its arguments.
@@ -429,6 +434,7 @@ function parse(command, pass) {
 		}
 	}
 }
+module.exports.parse = parse;
 
 /**
  * Deregisters every command.
@@ -437,6 +443,7 @@ function parse(command, pass) {
 function clear() {
 	return cmdRegistry.clear();
 }
+module.exports.clear = clear;
 
 /**
  * Deregisters a command.
@@ -452,17 +459,13 @@ function deregister(name, includeAlternatives = true) {
 	}
 	return cmdRegistry;
 }
+module.exports.deregister = deregister;
 
-module.exports = {
-	Argument,
-	Command,
-	argTypes,
-	clear,
-	deregister,
-	getCommandRegistry() {
-		return cmdRegistry;
-	},
-	parse,
-	register,
-	registerDirectory,
-};
+/**
+ * Gets the command registry.
+ * @return {Map} The command registry.
+ */
+function getCommandRegistry() {
+	return cmdRegistry;
+}
+module.exports.getCommandRegistry = getCommandRegistry;
