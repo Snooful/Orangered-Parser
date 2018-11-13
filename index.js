@@ -292,7 +292,13 @@ module.exports.argTypes = argTypes;
 
 class Command {
 	constructor(command) {
+		if (command.name.includes(" ")) {
+			const error = new Error("Command names may not include spaces.");
+			error.code = "SPACE_IN_COMMAND_NAME";
+			throw error;
+		}
 		this.name = command.name;
+		
 		this.originalName = command.originalName || command.name;
 
 		this.description = command.description;
