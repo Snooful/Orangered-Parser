@@ -290,17 +290,13 @@ const argTypes = {
 };
 module.exports.argTypes = argTypes;
 
-function findName(obj) {
-	return obj.name || obj.command;
-}
-
 class Command {
 	constructor(command) {
-		this.name = findName(command);
-		this.originalName = command.originalName || this.name;
+		this.name = command.name;
+		this.originalName = command.originalName || command.name;
 
-		this.description = command.description || command.describe || "";
-		this.longDescription = command.longDescription || this.description || "";
+		this.description = command.description;
+		this.longDescription = command.longDescription;
 
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
