@@ -298,7 +298,7 @@ class Command {
 			throw error;
 		}
 		this.name = command.name;
-		
+
 		this.originalName = command.originalName || command.name;
 
 		this.description = command.description;
@@ -350,7 +350,7 @@ module.exports.Command = Command;
 
 /**
  * Registers a single command.
- * @param {(object|Command)} cmd The command to register.
+ * @param {(Object|Command)} cmd The command to register.
  * @returns {Map} The registry including the new command.
  */
 function register(cmd) {
@@ -400,8 +400,8 @@ module.exports.registerDirectory = registerDirectory;
 /**
 	* Runs a command by parsing it and its arguments.
 	* @param {string} command The command to parse.
-	* @param {object} pass Extra values to pass to the command when ran.
-	* @returns {object} The arguments parsed.
+	* @param {Object} pass Extra values to pass to the command when ran.
+	* @returns {Object} The arguments parsed.
 */
 function parse(command, pass) {
 	const cmd = command.toString().trim();
@@ -410,17 +410,17 @@ function parse(command, pass) {
 		const cmdSource = cmdRegistry.get(cmdStr);
 		if (cmdSource) {
 			const args = split(cmd.substr(cmd.indexOf(" ") + 1), cmdSource.arguments.length);
-			const argsObj = Object.assign({}, pass);
+			const argsObj = { ...pass };
 
 			let success = true;
 
 			cmdSource.arguments.forEach((argument, index) => {
 				const get = argument.get(args[index], pass);
-				
+
 				// We camelCase this so it's easier to access
-				// args["casing-example"] vs. args.casingExample
+				// Args["casing-example"] vs. args.casingExample
 				argsObj[camelCase(argument.key)] = get.value;
-				
+
 				if (!get.success) {
 					success = false;
 				}
@@ -458,7 +458,7 @@ module.exports.clear = clear;
  * Deregisters a command.
  * @param {string} name The name of the command to deregister.
  * @param {boolean} includeAlternatives If true, also deregisters aliases of the same command (even if the target is an alias).
- * @return {Map} The command registry excluding the deregistered commands.
+ * @returns {Map} The command registry excluding the deregistered commands.
  */
 function deregister(name, includeAlternatives = true) {
 	if (includeAlternatives) {
@@ -472,7 +472,7 @@ module.exports.deregister = deregister;
 
 /**
  * Gets the command registry.
- * @return {Map} The command registry.
+ * @returns {Map} The command registry.
  */
 function getCommandRegistry() {
 	return cmdRegistry;
