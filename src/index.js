@@ -17,7 +17,7 @@ module.exports.Argument = argTypes.generic;
 module.exports.argTypes = argTypes;
 
 // Use this error when you want the user to be notified
-const InvalidArgumentError = require("./errors/invalid-argument-error.js");
+const InvalidArgumentError = require("./errors/invalid-argument.js");
 module.exports.InvalidArgumentError = InvalidArgumentError;
 
 class Command {

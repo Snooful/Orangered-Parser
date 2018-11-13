@@ -1,4 +1,4 @@
-const InvalidArgumentError = require("./../errors/invalid-argument-error.js");
+const InvalidArgumentError = require("../errors/invalid-argument.js");
 const Argument = require("./generic.js");
 
 class CommandArgument extends Argument {

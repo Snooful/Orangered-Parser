@@ -1,4 +1,4 @@
-const InvalidArgumentError = require("./../errors/invalid-argument-error.js");
+const InvalidArgumentError = require("../errors/invalid-argument.js");
 const StringArgument = require("./string.js");
 
 class SubredditArgument extends StringArgument {
