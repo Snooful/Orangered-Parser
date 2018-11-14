@@ -20,6 +20,10 @@ module.exports.argTypes = argTypes;
 const InvalidArgumentError = require("./errors/invalid-argument.js");
 module.exports.InvalidArgumentError = InvalidArgumentError;
 
+// Use this error when it is command-specific
+const CommandError = require("./errors/command.js");
+module.exports.CommandError = CommandError;
+
 class Command {
 	constructor(command) {
 		if (command.name.includes(" ")) {
@@ -86,13 +90,9 @@ module.exports.Command = Command;
 function register(cmd) {
 	const name = cmd.name;
 	if (!name) {
-		const error = new Error("Commands must have names.");
-		error.code = "MISSING_COMMAND_NAME";
-		throw error;
+		throw new CommandError("Commands must have names.", "MISSING_COMMAND_NAME");
 	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
-		const error = new TypeError("Commands must be specified as an object or Command type.");
-		error.code = "INVALID_COMMAND_TYPE";
-		throw error;
+		throw new CommandError("Commands must be specified as an object or Command type.", "INVALID_COMMAND_TYPE");
 	} else {
 		const alias = cmd.aliases || [];
 		alias.push(name);
