@@ -88,7 +88,7 @@ module.exports.Command = Command;
  * @param {(Object|Command)} cmd The command to register.
  * @returns {Map} The registry including the new command.
  */
-function register(cmd) {
+function registerSingle(cmd) {
 	const name = cmd.name;
 	if (!name) {
 		throw new CommandError("Commands must have names.", "MISSING_COMMAND_NAME");
@@ -110,6 +110,20 @@ function register(cmd) {
 		});
 
 		return cmdRegistry;
+	}
+}
+
+/**
+ * Registers a single command or an array of commands.
+ * @param {(Object|Object[]|Command|Command[])} cmdOrCmds The command(s) to register.
+ * @returns {Map} The registry including the new command(s).
+ */
+function register(cmdOrCmds) {
+	if (Array.isArray(cmdOrCmds)) {
+		cmdOrCmds.forEach(registerSingle);
+		return cmdRegistry;
+	} else {
+		return register(cmdOrCmds);
 	}
 }
 module.exports.register = register;
