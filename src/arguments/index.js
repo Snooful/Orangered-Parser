@@ -1,10 +1,8 @@
-module.exports = {
-	command: require("./command.js"),
-	custom: require("./custom.js"),
-	duration: require("./duration.js"),
-	generic: require("./generic.js"),
-	integer: require("./integer.js"),
-	string: require("./string.js"),
-	subreddit: require("./subreddit.js"),
-	user: require("./user.js"),
-};
+module.exports.command = require("./command.js");
+module.exports.custom = require("./custom.js");
+module.exports.duration = require("./duration.js");
+module.exports.generic = require("./generic.js");
+module.exports.integer = require("./integer.js");
+module.exports.string = require("./string.js");
+module.exports.subreddit = require("./subreddit.js");
+module.exports.user = require("./user.js");
