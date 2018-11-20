@@ -61,11 +61,12 @@ class Command {
 
 	/**
 		* Generates a string based off of the command and its arguments.
+		* @param {boolean} differentiateRequired If true, uses a separate set of brackets for required arguments.
 		* @returns {string} The command with arguments.
 	*/
-	usage() {
+	usage(differentiateRequired = true) {
 		const wrapped = this.arguments.map(arg => {
-			if (arg.required) {
+			if (arg.required && differentiateRequired) {
 				return `<${arg.key}>`;
 			} else {
 				return `[${arg.key}]`;
