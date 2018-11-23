@@ -9,6 +9,8 @@ const { split } = require("smart-splitter");
 // This is used to camelcase argument keys in the args object
 const camelCase = require("camelcase");
 
+const resolveCommand = require("./util/resolve-command.js");
+
 const argTypes = require("./arguments");
 /**
  * @deprecated Access this with `parser.argTypes.generic` instead.
@@ -36,8 +38,6 @@ function registerSingle(cmd) {
 	const name = cmd.name;
 	if (!name) {
 		throw new CommandError("Commands must have names.", "MISSING_COMMAND_NAME");
-	} else if (!(typeof cmd === "object" || cmd instanceof Command)) {
-		throw new CommandError("Commands must be specified as an object or Command type.", "INVALID_COMMAND_TYPE");
 	} else {
 		const alias = cmd.aliases || [];
 		alias.push(name);
@@ -49,7 +49,7 @@ function registerSingle(cmd) {
 			cmd.aliases = alias.filter(name2 => name2 !== aname);
 
 			// Make it into a Command and actually add it to the registry
-			const cmdFixed = typeof cmd === "object" ? new Command(cmd) : cmd;
+			const cmdFixed = resolveCommand(cmd);
 			cmdRegistry.set(aname, cmdFixed);
 		});
 
@@ -67,7 +67,7 @@ function register(cmdOrCmds) {
 		cmdOrCmds.forEach(registerSingle);
 		return cmdRegistry;
 	} else {
-		return register(cmdOrCmds);
+		return registerSingle(cmdOrCmds);
 	}
 }
 module.exports.register = register;
