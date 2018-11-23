@@ -1,6 +1,4 @@
-const InvalidArgumentError = require("../errors/invalid-argument.js");
 const Argument = require("./generic.js");
-
 const yn = require("yn");
 
 class BooleanArgument extends Argument {
