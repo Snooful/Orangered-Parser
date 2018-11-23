@@ -9,7 +9,7 @@ class Command {
 		}
 		this.name = command.name;
 
-		this.description = command.description;
+		this.description = command.description || command.describe;
 		this.longDescription = command.longDescription;
 
 		this.hidden = command.hidden || false;

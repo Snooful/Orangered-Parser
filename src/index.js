@@ -35,7 +35,7 @@ module.exports.Command = Command;
  * @returns {Map} The registry including the new command.
  */
 function registerSingle(cmd) {
-	const name = cmd.name;
+	const name = cmd.name || cmd.command;
 	if (!name) {
 		throw new CommandError("Commands must have names.", "MISSING_COMMAND_NAME");
 	} else {
