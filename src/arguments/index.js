@@ -1,3 +1,4 @@
+module.exports.boolean = require("./boolean.js");
 module.exports.command = require("./command.js");
 module.exports.custom = require("./custom.js");
 module.exports.duration = require("./duration.js");
