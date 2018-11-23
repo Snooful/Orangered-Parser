@@ -12,6 +12,8 @@ class Command {
 		this.description = command.description;
 		this.longDescription = command.longDescription;
 
+		this.hidden = command.hidden || false;
+
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
 				if (arg instanceof argTypes.generic) {
