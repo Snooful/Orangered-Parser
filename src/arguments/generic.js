@@ -1,17 +1,5 @@
 const InvalidArgumentError = require("../errors/invalid-argument.js");
-
-/**
- * Defaults a value.
- * @param {*} val The user's value.
- * @param {*} defaultTo The value to default to.
- * @returns {*}
- */
-function defaulter(val, defaultTo) {
-	if (!defaultTo) {
-		return val;
-	}
-	return (val === undefined || val instanceof Error) ? defaultTo : val;
-}
+const defaulter = require("./../util/default.js");
 
 class Argument {
 	constructor(argument) {
