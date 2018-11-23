@@ -18,15 +18,15 @@ class CommandError extends Error {
 		}
 
 		if (this.message || this.code) {
-			msg += chalk.redBright(": ");
+			msg += chalk.redBright(":");
 		}
 
 		if (this.message) {
-			msg += chalk.italic(this.message);
+			msg += " " + chalk.italic(this.message);
 		}
 
 		if (this.code) {
-			msg += chalk.dim("(" + this.code + ")");
+			msg += " " + chalk.dim("(" + this.code + ")");
 		}
 
 		return msg;
