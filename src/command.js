@@ -9,6 +9,8 @@ class Command {
 		}
 		this.name = command.name;
 
+		this.originalName = command.originalName || this.name;
+
 		this.description = command.description || command.describe;
 		this.longDescription = command.longDescription;
 
