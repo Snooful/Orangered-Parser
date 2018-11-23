@@ -170,6 +170,9 @@ function parse(command, pass) {
 				// Args["casing-example"] vs. args.casingExample
 				argsObj[camelCase(argument.key)] = get.value;
 
+				// You can still access it with the exact argument if needed, though
+				argsObj[argument.key] = get.value;
+
 				if (!get.success) {
 					success = false;
 				}
