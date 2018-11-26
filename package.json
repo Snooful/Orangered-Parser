@@ -13,17 +13,19 @@
 	"version": "3.1.0",
 	"main": "./src/index.js",
 	"devDependencies": {
+		"chai": "^4.1.2",
 		"eslint": "^5.9.0",
 		"eslint-config-haykam": "^1.5.1",
 		"eslint-plugin-extra-rules": "0.8.1",
 		"eslint-plugin-html": "^4.0.6",
 		"eslint-plugin-json": "^1.2.1",
 		"eslint-plugin-markdown": "^1.0.0-rc.1",
-		"eslint-plugin-unicorn": "^6.0.1"
+		"eslint-plugin-unicorn": "^6.0.1",
+		"mocha": "^5.2.0"
 	},
 	"scripts": {
 		"lint": "eslint \"./**/*.js\"",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "mocha test.js"
 	},
 	"repository": {
 		"type": "git",
