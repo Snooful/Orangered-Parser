@@ -8,8 +8,8 @@ describe("arguments", () => {
 	Object.keys(args).forEach(key => {
 		const arg = args[key];
 		describe(key, () => {
-			it("instance of generic argument", () => {
-				assert.isTrue(arg instanceof args.generic);
+			it("extends generic argument", () => {
+				assert.isTrue(arg === args.generic || arg.prototype instanceof args.generic);
 			});
 		});
 	});
