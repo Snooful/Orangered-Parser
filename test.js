@@ -1,10 +1,10 @@
-const path = require("path");
+/* eslint-env mocha */
 
 const chai = require("chai");
 const assert = chai.assert;
 
 describe("arguments", () => {
-	const args = require("./src/arguments/index.js");
+	const args = require("./src/arguments");
 	Object.keys(args).forEach(key => {
 		const arg = args[key];
 		describe(key, () => {
