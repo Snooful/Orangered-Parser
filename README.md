@@ -1,5 +1,9 @@
 # Orangered Parser
 
+[![GitHub release](https://img.shields.io/github/release/Snooful/Orangered-Parser.svg?style=popout&label=github)](https://github.com/Snooful/Orangered-Parser/releases/latest)
+[![npm](https://img.shields.io/npm/v/@snooful/orangered-parser.svg?style=popout&colorB=red)](https://www.npmjs.com/package/@snooful/orangered-parser)
+[![Travis (.com)](https://img.shields.io/travis/com/Snooful/Orangered-Parser.svg?style=popout)](https://travis-ci.com/Snooful/Orangered-Parser)
+
 A lightweight command parser for [Snooful](https://github.com/Snooful/Snooful).
 
 ## Installation
