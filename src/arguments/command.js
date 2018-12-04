@@ -17,12 +17,12 @@ class CommandArgument extends Argument {
 		const cmd = cmdRegistry.get(value);
 		if (cmd) {
 			if (!this.allowAlias && cmd.name !== cmd.originalName) {
-				return new InvalidArgumentError(this.constructor, args, "command_argument_not_original", this, value);
+				return new InvalidArgumentError(this, args, "command_argument_not_original", value);
 			} else {
 				return cmd;
 			}
 		} else {
-			return new InvalidArgumentError(this.constructor, args, "command_argument_nonexistent", this, value);
+			return new InvalidArgumentError(this, args, "command_argument_nonexistent", value);
 		}
 	}
 }

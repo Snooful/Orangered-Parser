@@ -19,11 +19,11 @@ class IntegerArgument extends Argument {
 		const int = parseInt(value);
 
 		if (isNaN(int) || !Number.isInteger(int)) {
-			return new InvalidArgumentError(this.constructor, args, "integer_argument_invalid", this, value);
+			return new InvalidArgumentError(this, args, "integer_argument_invalid", value);
 		} else if (int >= this.max) {
-			return new InvalidArgumentError(this.constructor, args, "integer_argument_too_high", this, value);
+			return new InvalidArgumentError(this, args, "integer_argument_too_high", value);
 		} else if (int <= this.min) {
-			return new InvalidArgumentError(this.constructor, args, "integer_argument_too_low", this, value);
+			return new InvalidArgumentError(this, args, "integer_argument_too_low", value);
 		} else {
 			return int;
 		}

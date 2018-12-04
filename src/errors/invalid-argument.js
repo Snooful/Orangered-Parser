@@ -2,7 +2,7 @@
  * An error when a value for an argument is not allowed or cannot be parsed.
  */
 class InvalidArgumentError extends Error {
-	constructor(sourceArg, args, localizationCode, argument, value) {
+	constructor(argument, args, localizationCode, value) {
 		super();
 
 		// Set the message
@@ -15,7 +15,7 @@ class InvalidArgumentError extends Error {
 
 		this.code = localizationCode.toUpperCase();
 
-		this.sourceArg = sourceArg;
+		this.sourceArg = argument.constructor;
 	}
 }
 module.exports = InvalidArgumentError;

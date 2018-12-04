@@ -12,14 +12,14 @@ class SubredditArgument extends StringArgument {
 
 		if (/^[A-Za-z0-9]\w+$/.test(noR)) {
 			if (noR.length < 3) {
-				return new InvalidArgumentError(this.constructor, args, "subreddit_argument_too_short", this, value);
+				return new InvalidArgumentError(this, args, "subreddit_argument_too_short", value);
 			} else if (noR.length > 20) {
-				return new InvalidArgumentError(this.constructor, args, "subreddit_argument_too_long", this, value);
+				return new InvalidArgumentError(this, args, "subreddit_argument_too_long", value);
 			} else {
 				return noR;
 			}
 		} else {
-			return new InvalidArgumentError(this.constructor, args, "subreddit_argument_invalid", this, value);
+			return new InvalidArgumentError(this, args, "subreddit_argument_invalid", value);
 		}
 	}
 }

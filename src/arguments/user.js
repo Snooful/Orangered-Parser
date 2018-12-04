@@ -14,14 +14,14 @@ class UserArgument extends StringArgument {
 
 		if (/^[\w-]+$/.test(noU)) {
 			if (noU.length < 3) {
-				return new InvalidArgumentError(this.constructor, args, "user_argument_too_short", this, value);
+				return new InvalidArgumentError(this, args, "user_argument_too_short", value);
 			} else if (noU.length > 20) {
-				return new InvalidArgumentError(this.constructor, args, "user_argument_too_long", this, value);
+				return new InvalidArgumentError(this, args, "user_argument_too_long", value);
 			} else {
 				return noU;
 			}
 		} else {
-			return new InvalidArgumentError(this.constructor, args, "user_argument_invalid", this, value);
+			return new InvalidArgumentError(this, args, "user_argument_invalid", value);
 		}
 	}
 }

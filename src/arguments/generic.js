@@ -49,7 +49,7 @@ class Argument {
 		const val = this.getValue(value, args, cmdRegistry);
 
 		if (this.required && val === undefined) {
-			return new InvalidArgumentError(this.constructor, args, "argument_required", this, value);
+			return new InvalidArgumentError(this, args, "argument_required", value);
 		}
 
 		const defaulted = defaulter(val, this.default);
@@ -57,7 +57,7 @@ class Argument {
 		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
 			return defaulted;
 		} else {
-			return new InvalidArgumentError(this.constructor, args, "argument_unavailable_choice", this, value);
+			return new InvalidArgumentError(this, args, "argument_unavailable_choice", value);
 		}
 	}
 

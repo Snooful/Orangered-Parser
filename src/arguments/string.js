@@ -20,11 +20,11 @@ class StringArgument extends Argument {
 
 		const str = value.toString();
 		if (!this.matches.test(str)) {
-			return new InvalidArgumentError(this.constructor, args, "string_argument_regexp_fail", this, value);
+			return new InvalidArgumentError(this, args, "string_argument_regexp_fail", value);
 		} else if (str.length >= this.maxLength) {
-			return new InvalidArgumentError(this.constructor, args, "string_argument_too_long", this, value);
+			return new InvalidArgumentError(this, args, "string_argument_too_long", value);
 		} else if (str.length <= this.minLength) {
-			return new InvalidArgumentError(this.constructor, args, "string_argument_too_short", this, value);
+			return new InvalidArgumentError(this, args, "string_argument_too_short", value);
 		} else {
 			return str;
 		}

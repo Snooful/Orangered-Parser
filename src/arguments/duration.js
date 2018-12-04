@@ -23,7 +23,7 @@ class DurationArgument extends Argument {
 		try {
 			return dur(value);
 		} catch (error) {
-			return new InvalidArgumentError(this.constructor, args, "duration_argument_invalid", this, value);
+			return new InvalidArgumentError(this, args, "duration_argument_invalid", value);
 		}
 	}
 }
