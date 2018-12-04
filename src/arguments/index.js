@@ -6,4 +6,5 @@ module.exports.generic = require("./generic.js");
 module.exports.integer = require("./integer.js");
 module.exports.string = require("./string.js");
 module.exports.subreddit = require("./subreddit.js");
+module.exports.url = require("./url.js");
 module.exports.user = require("./user.js");
