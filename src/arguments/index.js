@@ -1,4 +1,5 @@
 module.exports.boolean = require("./boolean.js");
+module.exports.bytes = require("./bytes.js");
 module.exports.color = require("./color.js");
 module.exports.command = require("./command.js");
 module.exports.custom = require("./custom.js");
