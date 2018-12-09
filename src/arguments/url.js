@@ -4,6 +4,7 @@ const StringArgument = require("./string.js");
 class URLArgument extends StringArgument {
 	constructor(argument) {
 		super(argument);
+		this.type = "url";
 	}
 
 	getValue(value, args) {

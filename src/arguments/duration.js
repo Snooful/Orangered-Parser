@@ -11,7 +11,6 @@ dur.millennium = dur.mil = (dur.century * 10);
 class DurationArgument extends Argument {
 	constructor(argument) {
 		super(argument);
-
 		this.type = "duration";
 	}
 

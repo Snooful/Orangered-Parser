@@ -4,6 +4,7 @@ const StringArgument = require("./string.js");
 class UserArgument extends StringArgument {
 	constructor(argument) {
 		super(argument);
+		this.type = "user";
 	}
 
 	getValue(value, args) {

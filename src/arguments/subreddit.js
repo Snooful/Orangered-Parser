@@ -4,6 +4,7 @@ const StringArgument = require("./string.js");
 class SubredditArgument extends StringArgument {
 	constructor(argument) {
 		super(argument);
+		this.type = "subreddit";
 	}
 
 	getValue(value, args) {
