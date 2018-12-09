@@ -6,9 +6,7 @@ const chroma = require("chroma-js");
 class ColorArgument extends Argument {
 	constructor(argument) {
 		super(argument);
-
 		this.type = "color";
-		this.allowAlias = argument.allowAlias || true;
 	}
 
 	getValue(value, args) {
