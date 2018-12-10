@@ -13,7 +13,13 @@ class ArgumentValue {
 		 */
 		this.success = !isInvalidError;
 
-		if (!isInvalidError) {
+		if (isInvalidError) {
+			/**
+			 * The error.
+			 * @type {InvalidArgumentError}
+			 */
+			this.error = value;
+		} else {
 			/**
 			 * The value that the argument was resolved to.
 			 */
