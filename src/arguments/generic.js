@@ -1,5 +1,6 @@
 const InvalidArgumentError = require("../errors/invalid-argument.js");
 const defaulter = require("./../util/default.js");
+const ArgumentValue = require("./..util/argument-value.js");
 
 class Argument {
 	constructor(argument) {
@@ -79,20 +80,20 @@ class Argument {
 		}
 	}
 
+	/**
+	 * Resolves and verifies an argument.
+	 * @param {*} value The value.
+	 * @param {*} args The args.
+	 * @param {*} cmdRegistry The command registry.
+	 * @returns {ArgumentValue}
+	 */
 	get(value, args, cmdRegistry) {
 		const val = this.getWithDefault(value, args, cmdRegistry);
 
 		if (val instanceof InvalidArgumentError) {
 			args.send(val.message);
-			return {
-				success: false,
-			};
-		} else {
-			return {
-				success: true,
-				value: val,
-			};
 		}
+		return new ArgumentValue(val);
 	}
 }
 module.exports = Argument;
