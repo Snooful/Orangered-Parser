@@ -35,6 +35,12 @@ class Argument {
 		this.choices = argument.choices;
 
 		/**
+		 * Whether to make the allowed choices case sensitive.
+		 * @type {boolean}
+		 */
+		this.choiceCaseSensitivity = argument.choiceCaseSensitivity || false;
+
+		/**
 		 * A description of the argument.
 		 * @type {string}
 		 */
@@ -54,15 +60,23 @@ class Argument {
 
 		const defaulted = defaulter(val, this.default);
 
-		if (!Array.isArray(this.choices) || this.choices.includes(defaulted)) {
+		if (!Array.isArray(this.choices)) {
 			return defaulted;
 		} else {
-			return new InvalidArgumentError(this, args, "argument_unavailable_choice", value);
+			const caseSensed = this.choiceCaseSensitivity ? defaulted : defaulted.toLowerCase();
+			const caseSensedChoices = this.choiceCaseSensitivity ? this.choices : this.choices.map(choice => choice.toLowerCase());
+
+			if (caseSensedChoices.includes(caseSensed)) {
+				return defaulted;
+			} else {
+				return new InvalidArgumentError(this, args, "argument_unavailable_choice", value);
+			}
 		}
 	}
 
 	get(value, args, cmdRegistry) {
 		const val = this.getWithDefault(value, args, cmdRegistry);
+
 		if (val instanceof InvalidArgumentError) {
 			args.send(val.message);
 			return {
