@@ -63,13 +63,18 @@ class Argument {
 		if (!Array.isArray(this.choices)) {
 			return defaulted;
 		} else {
-			const caseSensed = this.choiceCaseSensitivity ? defaulted : defaulted.toLowerCase();
-			const caseSensedChoices = this.choiceCaseSensitivity ? this.choices : this.choices.map(choice => choice.toLowerCase());
+			const found = this.choices.find(choice => {
+				if (this.choiceCaseSensitivity || typeof choice !== "string" || typeof defaulted !== "string") {
+					return choice === defaulted;
+				} else {
+					return choice.toLowerCase() === defaulted.toLowerCase();
+				}
+			});
 
-			if (caseSensedChoices.includes(caseSensed)) {
-				return defaulted;
-			} else {
+			if (found === null) {
 				return new InvalidArgumentError(this, args, "argument_unavailable_choice", value);
+			} else {
+				return found;
 			}
 		}
 	}
