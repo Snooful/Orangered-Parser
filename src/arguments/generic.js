@@ -1,6 +1,6 @@
 const InvalidArgumentError = require("../errors/invalid-argument.js");
 const defaulter = require("./../util/default.js");
-const ArgumentValue = require("./..util/argument-value.js");
+const ArgumentValue = require("./../util/argument-value.js");
 
 class Argument {
 	constructor(argument) {
