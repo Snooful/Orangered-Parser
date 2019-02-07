@@ -30,7 +30,7 @@ class Command {
 			this.arguments = [];
 		}
 
-		this.aliases = command.aliases || [];
+		this.aliases = Array.isArray(command.aliases) ? command.aliases : [];
 
 		this.check = command.check;
 
