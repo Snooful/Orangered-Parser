@@ -14,7 +14,7 @@ class Command {
 		this.description = command.description || command.describe;
 		this.longDescription = command.longDescription;
 
-		this.hidden = command.hidden || false;
+		this.hidden = !!command.hidden;
 
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
