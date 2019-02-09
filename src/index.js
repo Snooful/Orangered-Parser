@@ -109,6 +109,16 @@ function parse(command, pass) {
 
 			let success = true;
 
+			if (argsObj.testPermission) {
+				const cmdPerm = "commands." + (cmdSource.category ? cmdSource.category + "." : "") + cmdSource.originalName;
+				if (!argsObj.testPermission(cmdPerm)) {
+					success = false;
+					if (argsObj.localize && argsObj.send) {
+						argsObj.send(argsObj.localize("no_permission"));
+					}
+				}
+			}
+
 			cmdSource.arguments.forEach((argument, index) => {
 				const get = argument.get(args[index], pass, cmdRegistry);
 
