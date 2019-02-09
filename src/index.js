@@ -12,10 +12,6 @@ const camelCase = require("camelcase");
 const resolveCommand = require("./util/resolve-command.js");
 
 const argTypes = require("./arguments");
-/**
- * @deprecated Access this with `parser.argTypes.generic` instead.
- */
-module.exports.Argument = argTypes.generic;
 module.exports.argTypes = argTypes;
 
 // Use this error when you want the user to be notified
