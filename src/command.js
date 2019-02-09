@@ -14,6 +14,7 @@ class Command {
 		this.description = command.description || command.describe;
 		this.longDescription = command.longDescription;
 
+		this.category = command.category;
 		this.hidden = command.hidden || false;
 
 		if (command.arguments) {
