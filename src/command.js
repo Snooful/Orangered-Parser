@@ -17,6 +17,8 @@ class Command {
 		this.category = command.category;
 		this.hidden = command.hidden || false;
 
+		this.permissionless = !!command.permissionless;
+
 		if (command.arguments) {
 			this.arguments = command.arguments.map(arg => {
 				if (arg instanceof argTypes.generic) {

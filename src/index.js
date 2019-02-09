@@ -105,7 +105,7 @@ function parse(command, pass) {
 
 			let success = true;
 
-			if (argsObj.testPermission) {
+			if (argsObj.testPermission && cmdSource.permissionless) {
 				const cmdPerm = "commands." + (cmdSource.category ? cmdSource.category + "." : "") + cmdSource.originalName;
 				if (!argsObj.testPermission(cmdPerm)) {
 					success = false;
