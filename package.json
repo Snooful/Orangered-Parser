@@ -9,8 +9,8 @@
 		"collections": "^5.1.5",
 		"parse-duration": "^0.1.1",
 		"require-all": "^3.0.0",
-		"smart-splitter": "^3.0.0",
-		"yn": "^2.0.0"
+		"smart-splitter": "^3.1.0",
+		"yn": "^3.1.0"
 	},
 	"version": "4.0.0",
 	"main": "./src/index.js",
@@ -23,7 +23,7 @@
 		"eslint-plugin-json": "^1.4.0",
 		"eslint-plugin-markdown": "^1.0.0",
 		"eslint-plugin-unicorn": "^9.1.1",
-		"mocha": "^5.2.0"
+		"mocha": "^6.1.4"
 	},
 	"scripts": {
 		"lint": "eslint \"./**/*.js\"",
