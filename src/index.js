@@ -12,10 +12,6 @@ const camelCase = require("camelcase");
 const resolveCommand = require("./util/resolve-command.js");
 
 const argTypes = require("./arguments");
-/**
- * @deprecated Access this with `parser.argTypes.generic` instead.
- */
-module.exports.Argument = argTypes.generic;
 module.exports.argTypes = argTypes;
 
 // Use this error when you want the user to be notified
@@ -123,6 +119,16 @@ function parse(command, pass) {
 			const argsObj = { ...pass };
 
 			let success = true;
+
+			if (argsObj.testPermission && !cmdSource.permissionless) {
+				const cmdPerm = "commands." + (cmdSource.category ? cmdSource.category + "." : "") + cmdSource.originalName;
+				if (!argsObj.testPermission(cmdPerm)) {
+					success = false;
+					if (argsObj.localize && argsObj.send) {
+						argsObj.send(argsObj.localize("no_permission"));
+					}
+				}
+			}
 
 			cmdSource.arguments.forEach((argument, index) => {
 				const get = argument.get(args[index], pass, cmdRegistry);
