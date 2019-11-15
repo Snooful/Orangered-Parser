@@ -35,14 +35,29 @@ function registerSingle(cmd) {
 	if (!name) {
 		throw new CommandError("Commands must have names.", "MISSING_COMMAND_NAME");
 	} else {
-		const alias = cmd.aliases || [];
-		alias.push(name);
+		const alias = {};
+		if (Array.isArray(cmd.aliases)) {
+			// Arrays: each alias is as hidden as the base command
+			cmd.aliases.forEach(alias2 => {
+				alias[alias2] = cmd.hidden;
+			});
+		} else if (typeof cmd.aliases === "object") {
+			// Objects: the key is the alias name and the value is the hiddenness
+			Object.entries(cmd.aliases).forEach(aliasEntry => {
+				alias[aliasEntry[0]] = aliasEntry[1];
+			});
+		}
+		
+		// The main command is as hidden as you say it is (obviously)
+		alias[name] = cmd.hidden;
 
 		alias.forEach(aname => {
 			cmd.name = aname;
 			cmd.originalName = name;
+			
+			cmd.hidden = alias[aname] || cmd.hidden;
 
-			cmd.aliases = alias.filter(name2 => name2 !== aname);
+			cmd.aliases = Object.keys(alias).filter(name2 => name2 !== aname);
 
 			// Make it into a Command and actually add it to the registry
 			const cmdFixed = resolveCommand(cmd);

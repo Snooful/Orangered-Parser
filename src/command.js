@@ -15,7 +15,7 @@ class Command {
 		this.longDescription = command.longDescription;
 
 		this.category = command.category;
-		this.hidden = command.hidden || false;
+		this.hidden = !!command.hidden;
 
 		this.permissionless = !!command.permissionless;
 
@@ -33,7 +33,7 @@ class Command {
 			this.arguments = [];
 		}
 
-		this.aliases = command.aliases || [];
+		this.aliases = Array.isArray(command.aliases) ? command.aliases : [];
 
 		this.check = command.check;
 
