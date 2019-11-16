@@ -31,7 +31,7 @@ class Argument {
 
 		/**
 		 * The values allowed to be selected.
-		 * @type {*[]}
+		 * @type {any[]}
 		 */
 		this.choices = argument.choices;
 
