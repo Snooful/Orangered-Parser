@@ -1,10 +1,8 @@
-/* eslint-env mocha */
-
 const chai = require("chai");
 const assert = chai.assert;
 
 describe("arguments", () => {
-	const args = require("./src/arguments");
+	const args = require("../src/arguments");
 	Object.keys(args).forEach(key => {
 		const arg = args[key];
 		describe(key, () => {
