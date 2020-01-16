@@ -30,7 +30,7 @@
 	"scripts": {
 		"lint": "eslint \"./**/*.js\"",
 		"test": "mocha ./tests",
-		"docs": "jsdoc -r src -t node_modules/minami"
+		"docs": "jsdoc ./src --recurse --template node_modules/minami --destination ./docs"
 	},
 	"repository": {
 		"type": "git",
