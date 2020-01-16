@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>index.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Argument.html">Argument</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Argument.html#get">get</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ArgumentValue.html">ArgumentValue</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BooleanArgument.html">BooleanArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="BytesArgument.html">BytesArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="ColorArgument.html">ColorArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Command.html">Command</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Command.html#run">run</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Command.html#usage">usage</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="CommandArgument.html">CommandArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="CustomArgument.html">CustomArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="DurationArgument.html">DurationArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="IntegerArgument.html">IntegerArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="InvalidArgumentError.html">InvalidArgumentError</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="OrangeredParser.html">OrangeredParser</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#clear">clear</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#deregister">deregister</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#getCommandRegistry">getCommandRegistry</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#parse">parse</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#register">register</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#registerDirectory">registerDirectory</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="OrangeredParser.html#registerSingle">registerSingle</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="StringArgument.html">StringArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="SubredditArgument.html">SubredditArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="URLArgument.html">URLArgument</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="UserArgument.html">UserArgument</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#defaulter">defaulter</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#resolveCommand">resolveCommand</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const Map = require("collections/map");
+
+const path = require("path");
+const rqAll = require("require-all");
+
+const { split } = require("smart-splitter");
+
+// This is used to camelcase argument keys in the args object
+const camelCase = require("camelcase");
+
+const resolveCommand = require("./util/resolve-command.js");
+
+const argTypes = require("./arguments");
+module.exports.argTypes = argTypes;
+
+// Use this error when you want the user to be notified
+const InvalidArgumentError = require("./errors/invalid-argument.js");
+module.exports.InvalidArgumentError = InvalidArgumentError;
+
+// Use this error when it is command-specific
+const CommandError = require("./errors/command.js");
+module.exports.CommandError = CommandError;
+
+const Command = require("./command.js");
+module.exports.Command = Command;
+
+/**
+ * The orangered parser.
+ */
+class OrangeredParser {
+	constructor() {
+		/**
+		 * The command registry.
+		 */
+		this.registry = new Map();
+	}
+
+	/**
+	 * Deregisters every command.
+	 * @returns {undefined}
+	 */
+	clear() {
+		return this.registry.clear();
+	}
+
+	/**
+	 * Deregisters a command.
+	 * @param {string} name The name of the command to deregister.
+	 * @param {boolean} includeAlternatives If true, also deregisters aliases of the same command (even if the target is an alias).
+	 * @returns {Map} The command registry excluding the deregistered commands.
+	 */
+	deregister(name, includeAlternatives = true) {
+		if (includeAlternatives) {
+			this.registry = this.registry.filter(command => command.originalName !== name);
+		} else {
+			this.registry = this.registry.filter(command => command.name !== name);
+		}
+		return this.registry;
+	}
+
+	/**
+	 * Gets the command registry.
+	 * @returns {Map} The command registry.
+	 */
+	getCommandRegistry() {
+		return this.registry;
+	}
+
+	/**
+	 * Runs a command by parsing it and its arguments.
+	 * @param {string} command The command to parse.
+	 * @param {Object} pass Extra values to pass to the command when ran.
+	 * @returns {Object} The arguments parsed.
+	 */
+	parse(command, pass) {
+		const cmd = command.toString().trim();
+		const firstSpace = cmd.includes(" ") ? cmd.indexOf(" ") : cmd.length;
+		const cmdStr = cmd.substr(0, firstSpace);
+
+		if (cmdStr) {
+			const cmdSource = this.registry.get(cmdStr);
+			if (cmdSource) {
+				const args = split(cmd.substr(firstSpace + 1), cmdSource.arguments.length);
+				const argsObj = {
+					...pass,
+				};
+
+				let success = true;
+
+				if (argsObj.testPermission &amp;&amp; !cmdSource.permissionless) {
+					const cmdPerm = "commands." + (cmdSource.category ? cmdSource.category + "." : "") + cmdSource.originalName;
+					if (!argsObj.testPermission(cmdPerm)) {
+						success = false;
+						if (argsObj.localize &amp;&amp; argsObj.send) {
+							argsObj.send(argsObj.localize("no_permission"));
+						}
+					}
+				}
+
+				cmdSource.arguments.forEach((argument, index) => {
+					const get = argument.get(args[index], pass, this.registry);
+
+					// We camelCase this so it's easier to access
+					// Args["casing-example"] vs. args.casingExample
+					argsObj[camelCase(argument.key)] = get.value;
+
+					// You can still access it with the exact argument if needed, though
+					argsObj[argument.key] = get.value;
+
+					if (!get.success) {
+						success = false;
+					}
+				});
+
+				if (success) {
+					if (Array.isArray(cmdSource.check)) {
+						if (cmdSource.check.every(check => check(argsObj))) {
+							cmdSource.run(argsObj);
+						}
+					} else if (cmdSource.check) {
+						if (cmdSource.check(argsObj)) {
+							cmdSource.run(argsObj);
+						}
+					} else {
+						cmdSource.run(argsObj);
+					}
+					return argsObj;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Registers a single command or an array of commands.
+	 * @param {(Object|Object[]|Command|Command[])} cmdOrCmds The command(s) to register.
+	 * @returns {Map} The registry including the new command(s).
+	 */
+	register(cmdOrCmds) {
+		if (Array.isArray(cmdOrCmds)) {
+			cmdOrCmds.forEach(this.registerSingle.bind(this));
+			return this.registry;
+		} else {
+			return this.register(cmdOrCmds);
+		}
+	}
+
+	/**
+	 * Registers every JavaScript file in a directory as a command.
+	 * @param {string} directory The path to the directory to register.
+	 * @param {boolean} recursive If true, registers commands in subdirectories.
+ 	 * @returns {Map} The registry including the new commands.
+	*/
+	registerDirectory(directory = "", recursive = true) {
+		rqAll({
+			dirname: path.resolve(directory),
+			filter: /\.js$/,
+			recursive,
+			resolve: this.register.bind(this),
+		});
+		return this.registry;
+	}
+
+	/**
+	 * Registers a single command.
+	 * @param {(Object|Command)} cmd The command to register.
+	 * @returns {Map} The registry including the new command.
+	 */
+	registerSingle(cmd) {
+		const name = cmd.name || cmd.command;
+		if (!name) {
+			throw new CommandError("Commands must have names.", "MISSING_COMMAND_NAME");
+		} else {
+			const alias = {};
+			if (Array.isArray(cmd.aliases)) {
+				// Arrays: each alias is as hidden as the base command
+				cmd.aliases.forEach(alias2 => {
+					alias[alias2] = cmd.hidden;
+				});
+			} else if (typeof cmd.aliases === "object") {
+				// Objects: the key is the alias name and the value is the hiddenness
+				Object.entries(cmd.aliases).forEach(aliasEntry => {
+					alias[aliasEntry[0]] = aliasEntry[1];
+				});
+			}
+
+			// The main command is as hidden as you say it is (obviously)
+			alias[name] = cmd.hidden;
+
+			alias.forEach(aname => {
+				cmd.name = aname;
+				cmd.originalName = name;
+
+				cmd.hidden = alias[aname] || cmd.hidden;
+
+				cmd.aliases = Object.keys(alias).filter(name2 => name2 !== aname);
+
+				// Make it into a Command and actually add it to the registry
+				const cmdFixed = resolveCommand(cmd);
+				this.registry.set(aname, cmdFixed);
+			});
+
+			return this.registry;
+		}
+	}
+}
+module.exports.OrangeredParser = OrangeredParser;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Jan 16 2020 18:19:17 GMT+0000 (Coordinated Universal Time) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
