@@ -1,6 +1,9 @@
 const InvalidArgumentError = require("../errors/invalid-argument.js");
 const StringArgument = require("./string.js");
 
+/**
+ * A string argument.
+ */
 class SubredditArgument extends StringArgument {
 	constructor(argument) {
 		super(argument);

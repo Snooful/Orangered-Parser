@@ -1,6 +1,9 @@
 const InvalidArgumentError = require("../errors/invalid-argument.js");
 const Argument = require("./generic.js");
 
+/**
+ * A string argument.
+ */
 class StringArgument extends Argument {
 	constructor(argument) {
 		super(argument);

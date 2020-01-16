@@ -29,6 +29,9 @@ module.exports.Command = Command;
  */
 class OrangeredParser {
 	constructor() {
+		/**
+		 * The command registry.
+		 */
 		this.registry = new Map();
 	}
 

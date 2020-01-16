@@ -3,6 +3,9 @@ const Argument = require("./generic.js");
 
 const { parse } = require("bytes");
 
+/**
+ * A bytes argument.
+ */
 class BytesArgument extends Argument {
 	constructor(argument) {
 		super(argument);

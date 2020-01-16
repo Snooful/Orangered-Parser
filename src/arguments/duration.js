@@ -8,6 +8,9 @@ dur.decade = dur.dec = (dur.year * 10);
 dur.century = dur.cen = (dur.decade * 10);
 dur.millennium = dur.mil = (dur.century * 10);
 
+/**
+ * A duration argument.
+ */
 class DurationArgument extends Argument {
 	constructor(argument) {
 		super(argument);

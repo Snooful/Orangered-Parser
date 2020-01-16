@@ -1,6 +1,9 @@
 const InvalidArgumentError = require("../errors/invalid-argument.js");
 const Argument = require("./generic.js");
 
+/**
+ * A comment argument.
+ */
 class CommandArgument extends Argument {
 	constructor(argument) {
 		super(argument);

@@ -3,6 +3,9 @@ const Argument = require("./generic.js");
 
 const yn = require("yn");
 
+/**
+ * A boolean argument.
+ */
 class BooleanArgument extends Argument {
 	constructor(argument) {
 		super(argument);

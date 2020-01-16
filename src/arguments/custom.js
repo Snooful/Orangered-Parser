@@ -1,5 +1,8 @@
 const Argument = require("./generic.js");
 
+/**
+ * A custom argument.
+ */
 class CustomArgument extends Argument {
 	constructor(argument) {
 		super(argument);
@@ -8,8 +11,8 @@ class CustomArgument extends Argument {
 		this.custom = argument.custom;
 	}
 
-	getValue() {
-		this.custom(...arguments);
+	getValue(...args) {
+		this.custom(...args);
 	}
 }
 module.exports = CustomArgument;

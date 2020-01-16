@@ -3,6 +3,9 @@ const Argument = require("./generic.js");
 
 const chroma = require("chroma-js");
 
+/**
+ * A color argument.
+ */
 class ColorArgument extends Argument {
 	constructor(argument) {
 		super(argument);
