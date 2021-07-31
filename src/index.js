@@ -75,12 +75,12 @@ class OrangeredParser {
 	parse(command, pass) {
 		const cmd = command.toString().trim();
 		const firstSpace = cmd.includes(" ") ? cmd.indexOf(" ") : cmd.length;
-		const cmdStr = cmd.substr(0, firstSpace);
+		const cmdStr = cmd.slice(0, firstSpace);
 
 		if (cmdStr) {
 			const cmdSource = this.registry.get(cmdStr);
 			if (cmdSource) {
-				const args = split(cmd.substr(firstSpace + 1), cmdSource.arguments.length);
+				const args = split(cmd.slice(firstSpace + 1), cmdSource.arguments.length);
 				const argsObj = {
 					...pass,
 				};

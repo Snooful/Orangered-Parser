@@ -14,7 +14,7 @@ class SubredditArgument extends StringArgument {
 		const string = super.getValue(value, args);
 		const noR = /(r\/)?(.*)/i.exec(string)[2];
 
-		if (/^[A-Za-z0-9]\w+$/.test(noR)) {
+		if (/^[\dA-Za-z]\w+$/.test(noR)) {
 			if (noR.length < 3) {
 				return new InvalidArgumentError(this, args, "subreddit_argument_too_short", value);
 			} else if (noR.length > 20) {
