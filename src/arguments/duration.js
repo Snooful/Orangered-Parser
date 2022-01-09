@@ -4,9 +4,14 @@ const Argument = require("./generic.js");
 const dur = require("parse-duration");
 
 // Add some extra (large) units
-dur.decade = dur.dec = (dur.year * 10);
-dur.century = dur.cen = (dur.decade * 10);
-dur.millennium = dur.mil = (dur.century * 10);
+dur.decade = (dur.year * 10);
+dur.century = (dur.decade * 10);
+dur.millennium = (dur.century * 10);
+
+// Shorter aliases
+dur.dec = dur.decade;
+dur.cen = dur.century;
+dur.mil = dur.millennium;
 
 /**
  * A duration argument.

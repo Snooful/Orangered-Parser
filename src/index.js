@@ -148,8 +148,8 @@ class OrangeredParser {
 	 * Registers every JavaScript file in a directory as a command.
 	 * @param {string} directory The path to the directory to register.
 	 * @param {boolean} recursive If true, registers commands in subdirectories.
- 	 * @returns {Map} The registry including the new commands.
-	*/
+	 * @returns {Map} The registry including the new commands.
+	 */
 	registerDirectory(directory = "", recursive = true) {
 		rqAll({
 			dirname: path.resolve(directory),
