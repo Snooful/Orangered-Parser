@@ -22,7 +22,7 @@ class BooleanArgument extends Argument {
 		const boolean = yn(value, {
 			lenient: this.lenient,
 		});
-		return boolean === null ? new InvalidArgumentError(this, args, "boolean_argument_invalid", value) : boolean;
+		return boolean === undefined ? new InvalidArgumentError(this, args, "boolean_argument_invalid", value) : boolean;
 	}
 }
 module.exports = BooleanArgument;

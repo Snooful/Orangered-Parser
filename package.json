@@ -10,7 +10,7 @@
 		"parse-duration": "^0.1.1",
 		"require-all": "^3.0.0",
 		"smart-splitter": "^3.1.0",
-		"yn": "^3.1.0"
+		"yn": "^4.0.0"
 	},
 	"version": "4.0.0",
 	"main": "./src/index.js",
